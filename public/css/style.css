@@ -1,30 +1,46 @@
 
-.field1{
-	width: 40%;
-}
 
-.marketing .col-lg-4 {
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.marketing h2 {
+/* .marketing h2 {
+    font-size: 7vh;
   	font-weight: 400;
-}
+} */
 
-.marketing .col-lg-4 p {
-  	margin-right: .75rem;
-  	margin-left: .75rem;
-}
 
 .featurette-divider {
   	margin: 5rem 0; /* Space out the Bootstrap <hr> more */
+}
+
+/* Thin out the marketing headings */
+.featurette-heading {
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -.05rem;
+}
+
+.big-text {
+  font-size: 3vh;
+}
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+
+@media (min-width: 40em) {
+  .featurette-heading {
+    font-size: 50px;
+  }
+}
+
+@media (min-width: 62em) {
+  .featurette-heading {
+    margin-top: 7rem;
+  }
 }
 
 .navbar {
 	position:absolute;
 	z-index:1;
 }
+
 
 
 /*Vertical Sliding*/
@@ -183,7 +199,11 @@
     font-weight: 400;
     text-transform: capitalize;
     height: calc(3rem + 2px) !important;
-   background-color:#ffd93b ; 
+   background-color:#ffd93b; 
+}
+
+.explore-btn{
+  background-color:#ffd93b; 
 }
 
 .radius-right {
@@ -223,6 +243,11 @@
   display: flex;
 }
 
+.carousel-control-prev .carousel-control-next{
+
+
+}
+
 /* display 3 */
 
 @media (min-width: 768px) {
@@ -244,11 +269,22 @@ transform: translateX(0);
 } 
 
 .carousel-control-prev-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+  filter: invert(100);
  }
  
  .carousel-control-next-icon {
-   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
- }
+  filter: invert(100);
+}
 
- 
+/*
+ Footer
+ */
+.blog-footer {
+  padding: 2.5rem 0;
+  color: #999;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+.blog-footer p:last-child {
+  margin-bottom: 0;
+}
