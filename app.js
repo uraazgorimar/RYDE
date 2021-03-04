@@ -17,14 +17,10 @@ app.use(bodyParser.urlencoded({
 }));
 app.get('/', function(req,res) {
     res.sendFile(__dirname+"/homepage.html");
-
+});
 app.get('/viewProfile', function(req, res) {
   res.render('viewProfile.ejs');
-
-app.get("/", function (req, res) {
-  res.sendFile(__dirname + "/homepage.html");
 });
-
 app.get("/bookingCar", function (req, res) {
   res.render("bookingCar");
 });
@@ -37,6 +33,6 @@ app.get("/signInUp", function (req, res) {
 
 app.get('/list', function (req, res) {
     res.render("listing");
-
+});
 app.listen(8000);
 console.log("Server started successfully!");
