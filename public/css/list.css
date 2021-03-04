@@ -1,0 +1,22 @@
+.container {
+  max-width: 960px;
+}
+
+.lh-condensed { line-height: 1.25; }
+
+/*
+ Footer
+ */
+.blog-footer {
+  padding: 2.5rem 0;
+  color: #999;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+.blog-footer p:last-child {
+  margin-bottom: 0;
+}
+
+.btn {
+  padding: 5px 45px;
+}
