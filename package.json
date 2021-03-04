@@ -9,13 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-<<<<<<< HEAD
-<<<<<<< HEAD
+
     "body-parser": "^1.19.0",
-=======
->>>>>>> 593d12461dff161832da73fbeb32c521bb75b609
-=======
->>>>>>> 0ffeed7f603b7269a77ef9cceda0e3e6240c4c97
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "nodemon": "^2.0.7"
