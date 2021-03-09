@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -47,34 +48,34 @@
         </div>
         <hr class="mb-4">
         <div class="col-md-12 order-md-1">
-            <form class="needs-validation" novalidate>
+            <form class="needs-validation" novalidate action="/list" method="post" autocomplete="off">
                 <h5 class="yellow-text">Your Ryde</h5>
                 <span class="text-muted">Where is the car located?</span>
                 <div class="row">
                     <div class="col-md-3 mb-3">
                         <label for="address">Address</label>
-                        <input type="text" class="form-control" id="address" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="address" placeholder="" value="" name="address" required>
                         <div class="invalid-feedback">
                             Valid address is required.
                         </div>
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="city">City</label>
-                        <input type="text" class="form-control" id="city" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="city" placeholder="" value="" name="city" required>
                         <div class="invalid-feedback">
                             Valid city is required.
                         </div>
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="state">State</label>
-                        <input type="text" class="form-control" id="state" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="state" placeholder="" value="" name="state" required>
                         <div class="invalid-feedback">
                             Valid state is required.
                         </div>
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="zip">Zip</label>
-                        <input type="text" class="form-control" id="zip" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="zip" placeholder="" value="" name="zip" required>
                         <div class="invalid-feedback">
                             Zip code is required.
                         </div>
@@ -84,7 +85,7 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="year">Year</label>
-                        <input type="number" class="form-control" id="year" placeholder="" value="" required min="1981"
+                        <input type="number" class="form-control" id="year" placeholder="" name="year" value="" required min="1981"
                             max="2021">
                         <div class="invalid-feedback">
                             Year is required.
@@ -92,14 +93,14 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="category">Car Category</label>
-                        <input type="text" class="form-control" id="category" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="category" name="category" placeholder="" value="" required>
                         <div class="invalid-feedback">
                             Car Category is required.
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="make">Make</label>
-                        <input type="text" class="form-control" id="make" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="make" name="make" placeholder="" value="" required>
                         <div class="invalid-feedback">
                             Make of car is required.
                         </div>
@@ -108,21 +109,21 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="model">Model</label>
-                        <input type="text" class="form-control" id="model" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="model" name="model" placeholder="" value="" required>
                         <div class="invalid-feedback">
                             Model is required.
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="kmpl">KM/L</label>
-                        <input type="text" class="form-control" id="kmpl" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="kmpl" name="kmpl" placeholder="" value="" required>
                         <div class="invalid-feedback">
                             KM/L is required.
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="doors">Number of Doors</label>
-                        <input type="number" class="form-control" id="doors" placeholder="" value="" required min="1"
+                        <input type="number" class="form-control" id="doors" name="doors" placeholder="" value="" required min="1"
                             max="5">
                         <div class="invalid-feedback">
                             Number of doors is required.
@@ -132,14 +133,14 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="seats">Number of Seats</label>
-                        <input type="number" class="form-control" id="seats" placeholder="" value="" required min="1" max="10">
+                        <input type="number" class="form-control" id="seats" name="seats" placeholder="" value="" required min="1" max="10">
                         <div class="invalid-feedback">
                             Number of Seats is required.
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="fuel">Fuel Type</label>
-                        <input type="text" class="form-control" id="fuel" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="fuel" name="fuel" placeholder="" value="" required>
                         <div class="invalid-feedback">
                             Fuel type is required.
                         </div>
@@ -169,7 +170,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="price">Price of car <span class="text-muted">(in rupees)</span></label>
                         <br>
-                        <input type="number" class="form-control" id="price" placeholder="" value="" required min="1">
+                        <input type="number" class="form-control" id="price" name="price" placeholder="" value="" required min="1">
                         <div class="invalid-feedback">
                             Price is required.
                         </div>
@@ -179,7 +180,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="description">Car description</label>
                         <br>
-                        <textarea name="description" id="carDescription" cols="60" rows="5"
+                        <textarea name="description" id="carDescription" name="carDescription" cols="60" rows="5"
                             placeholder="A good detailed description will get you more trips." required></textarea>
                         <div class="invalid-feedback">
                             Description is required.
@@ -192,31 +193,31 @@
                         <label for="description">Car features</label>
                         <br>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="bluetooth">
-                            <label class="form-check-label" for="inlineCheckbox1">Bluetooth</label>
+                            <input class="form-check-input" type="checkbox" id="bluetooth" name="bluetooth" value="bluetooth">
+                            <label class="form-check-label" for="bluetooth">Bluetooth</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="airConditioner">
-                            <label class="form-check-label" for="inlineCheckbox2">Air-Conditioner</label>
+                            <input class="form-check-input" type="checkbox" id="airConditioner" name="airConditioner" value="airConditioner">
+                            <label class="form-check-label" for="airConditioner">Air-Conditioner</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="carplayAndroidAuto">
-                            <label class="form-check-label" for="inlineCheckbox2">Carplay / Android Auto</label>
+                            <input class="form-check-input" type="checkbox" id="carplayAndroidAuto" name="carplayAndroidAuto" value="carplayAndroidAuto">
+                            <label class="form-check-label" for="carplayAndroidAuto">Carplay / Android Auto</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="airConditioner">
-                            <label class="form-check-label" for="inlineCheckbox2">Backup Camera</label>
+                            <input class="form-check-input" type="checkbox" id="backupCamera" name="backupCamera" value="backupCamera">
+                            <label class="form-check-label" for="backupCamera">Backup Camera</label>
                         </div>
                     </div>
                 </div>
                 <hr class="mb-4">
                 <div class="col-md-4 custom-file">
-                    <input type="file" class="custom-file-input" id="customFile"  accept="image/*">
+                    <input type="file" class="custom-file-input" id="license"  accept="image/*" name="license">
                     <label class="custom-file-label" for="customFile">Driver's License</label>
                 </div>
                 <br><br>
                 <div class="col-md-4 custom-file">
-                    <input type="file" class="custom-file-input" id="customFile" accept="image/*">
+                    <input type="file" class="custom-file-input" id="rydePaps" accept="image/*" name="rydePaps">
                     <label class="custom-file-label" for="customFile">Pictures of Ryde</label>
                 </div>
                 
