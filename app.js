@@ -43,6 +43,12 @@ app.get('/viewProfile', function (req, res) {
   });
 });
 
+app.post("/viewProfile",function (req, res) {
+  con.query("UPDATE user_info SET State='"+req.body.state+"',City='"+req.body.City+"',Zip='"+req.body.zip+"',Profile_photo='"+req.body.photo+"',Description='"+description+"');",function (err, result) {
+    console.log(result);
+  });
+});
+
 
 app.get("/signInUp", function (req, res) {
   res.render("signInUp.ejs");
