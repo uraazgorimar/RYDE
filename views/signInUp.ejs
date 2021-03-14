@@ -42,36 +42,46 @@
     <div class="container">
       <div class="forms-container">
         <div class="signin-signup">
-          <form action="#" class="sign-in-form">
+          <form action="/signin" method="POST" novalidate class="sign-in-form">
             <h2 class="title">Sign in</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="text" placeholder="Username" />
+              <input type="text" name="useremail" id="email" placeholder="Email id" />
             </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>
-              <input type="password" placeholder="Password" />
+              <input type="password" name="userpass" id="pass" placeholder="Password" />
             </div>
+            <% if (locals.login_errors) { 
+              login_errors.forEach(function(error_msg){ %>
+            <div class="alert alert-danger" role="alert"><%= error_msg %></div>
+            <% });
+            } %>
             <input style="color: black;  border-radius: 55px;" type="submit" value="Login" class="btn btn-warning" />
           </form>
-          <form action="#" class="sign-up-form">
+          <form action="/signup" method="POST" novalidate class="sign-up-form">
             <h2 class="title">Sign up</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="text" placeholder="First Name" />
+              <input type="text" name="firstname" id="fname" placeholder="First Name" />
             </div>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="password" placeholder="Last Name" />
+              <input type="password" name="lastname" id="lname" placeholder="Last Name" />
             </div>
             <div class="input-field">
               <i class="fas fa-envelope"></i>
-              <input type="email" placeholder="Email" />
+              <input type="email" name="useremail" id="remail"  placeholder="Email" />
             </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>
-              <input type="password" placeholder="Password" />
+              <input type="password" name="userpass" id="rpass" placeholder="Password" />
             </div>
+            <% if (locals.register_error) { 
+              register_error.forEach(function(error_msg){ %>
+            <div class="alert alert-danger" role="alert"><%= error_msg %></div>
+            <% });
+            } %>
             <input style="color: black; border-radius: 55px;" type="submit" class="btn btn-warning" value="Sign up" />
           </form>
         </div>

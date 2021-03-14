@@ -1,9 +1,11 @@
-
 const express = require('express');
 const ejs = require('ejs');
 const mysql = require("mysql");
+const bcrypt = require('bcryptjs');
+const cookiesesh = require('cookie-session');
 var multer = require('multer');
 var upload = multer({ dest: 'uploads/' });
+const { body, validationResult } = require('express-validator');
 
 const app = express();
 
@@ -28,8 +30,137 @@ app.set('view engine', 'ejs');
 //   extended: true
 // }));
 
+app.use(cookiesesh({
+  name:'session',
+  keys: ['key1', 'key2'],
+  maxAge: 3600 * 1000
+}));
+
 app.get('/', function (req, res) {
   res.sendFile(__dirname + "/homepage.html");
+});
+
+const ifNotLoggedin = (req, res, next) => {
+  if(!req.session.isLoggedIn){
+      return res.render('signInUp');
+  }
+  next();
+}
+
+const ifLoggedin = (req,res,next) => {
+  if(req.session.isLoggedIn){
+      return res.redirect('/viewProfile');
+  }
+  next();
+}
+
+/* app.get('/', ifNotLoggedin, (req,res,next) => {
+  con.execute("SELECT `name` FROM `user_info` WHERE `User_id`=?",[req.session.User_id])
+  .then(([rows]) => {
+      res.render('homepage.html',{
+          name:rows[0].name
+      });
+  });
+  
+}); */
+
+
+app.post('/signup', ifLoggedin, 
+[
+  body('useremail','Invalid email address!').isEmail().custom((value) => {
+      return con.execute('SELECT `Email` FROM `user_info` WHERE `Email`=?', [value])
+      .then(([rows]) => {
+          if(rows.length > 0){
+              return Promise.reject('This E-mail already in use!');
+          }
+          return true;
+      });
+  }),
+  body('fname','First name is Empty!').trim().not().isEmpty(),
+  body('lname','Last name is Empty!').trim().not().isEmpty(),
+  body('userpass','The password must be of minimum length 6 characters').trim().isLength({ min: 6 }),
+],
+
+(req,res,next) => {
+
+  const validation_result = validationResult(req);
+  const {fname, lname, userpass, useremail} = req.body;
+  // IF validation_result HAS NO ERROR
+  if(validation_result.isEmpty()){
+      // password encryption (using bcryptjs)
+      bcrypt.hash(userpass, 12).then((hash_pass) => {
+          // INSERTING USER INTO DATABASE
+          con.execute("INSERT INTO 'user_info'('Fname','Lname','email','password') VALUES(?,?,?,?)",[fname, lname,useremail, hash_pass])
+          .then(result => {
+              res.send('Account successfully created ! <a href="/">Login</a>');
+          }).catch(err => {
+              if (err) throw err;
+          });
+      })
+      .catch(err => {
+          if (err) throw err;
+      })
+  }
+  else{
+      let allErrors = validation_result.errors.map((error) => {
+          return error.msg;
+      });
+      res.render('signInUp',{
+          register_error:allErrors,
+          old_data:req.body
+      });
+  }
+});
+
+app.post('/signin', ifLoggedin, [
+  body('useremail').custom((value) => {
+      return con.execute("SELECT 'Email' FROM 'user_info' WHERE 'email'=?", [value])
+      .then(([rows]) => {
+          if(rows.length == 1){
+              return true;
+              
+          }
+          return Promise.reject('Invalid Email Address!');
+          
+      });
+  }),
+  body('userpass','Password is empty!').trim().not().isEmpty(),
+], (req, res) => {
+  const validation_result = validationResult(req);
+  const {userpass, useremail} = req.body;
+  if(validation_result.isEmpty()){
+      
+      con.execute("SELECT * FROM 'user_info' WHERE 'email'=?",[useremail])
+      .then(([rows]) => {
+          bcrypt.compare(userpass, rows[0].password).then(compare_result => {
+              if(compare_result === true){
+                  req.session.isLoggedIn = true;
+                  req.session.User_id = rows[0].User_id;
+                  res.redirect('/');
+              }
+              else{
+                  res.render('signInUp',{
+                      login_errors:['Invalid Password!']
+                  });
+              }
+          })
+          .catch(err => {
+              if (err) throw err;
+          });
+
+
+      }).catch(err => {
+          if (err) throw err;
+      });
+  }
+  else{
+      let allErrors = validation_result.errors.map((error) => {
+          return error.msg;
+      });
+      res.render('signInUp',{
+          login_errors:allErrors
+      });
+  }
 });
 
 app.get('/viewProfile', function (req, res) {
