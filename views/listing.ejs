@@ -48,7 +48,7 @@
         </div>
         <hr class="mb-4">
         <div class="col-md-12 order-md-1">
-            <form class="needs-validation" novalidate action="/list" method="post" autocomplete="off">
+            <form class="needs-validation" novalidate action="/list" method="post" enctype="multipart/form-data" autocomplete="off">
                 <h5 class="yellow-text">Your Ryde</h5>
                 <span class="text-muted">Where is the car located?</span>
                 <div class="row">
@@ -211,14 +211,14 @@
                     </div>
                 </div>
                 <hr class="mb-4">
-                <div class="col-md-4 custom-file">
+                <!-- <div class="col-md-4 custom-file">
                     <input type="file" class="custom-file-input" id="license"  accept="image/*" name="license">
                     <label class="custom-file-label" for="customFile">Driver's License</label>
                 </div>
-                <br><br>
+                <br><br> -->
                 <div class="col-md-4 custom-file">
-                    <input type="file" class="custom-file-input" id="rydePaps" accept="image/*" name="rydePaps">
-                    <label class="custom-file-label" for="customFile">Pictures of Ryde</label>
+                    <input type="file" class="custom-file-input" id="rydePaps" accept="image/*" name="rydePaps" multiple>
+                    <label class="custom-file-label" for="rydePaps">Pictures of Ryde</label>
                 </div>
                 
                 <hr class="mb-4">
