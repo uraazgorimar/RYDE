@@ -406,7 +406,7 @@
                       <p class="mb-0 "><b>Duration:</b> <%=history[i].Duration_hrs%> hours </p>
                       <p class="mb-0 "><b>Location: </b> <%=history[i].State%>, <%=history[i].City%>  </p>
 
-                    </div><img src="/resources/<%=history[i].Car_img%>" alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
+                    </div><img src="/resources/<%=history[i].Car_img.split(",")[0]%>" alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
                   </div>
                   <!-- End -->
                 </li>
@@ -448,13 +448,13 @@
             <!-- Custom content-->
             <div class="media align-items-lg-center flex-column flex-lg-row p-3">
               <div class="media-body order-2 order-lg-1">
-                <h5 class="mt-0 mb-2 h3" style="color: #ffd93b;"><%=history[i].Car_category%></h5>
+                <h5 class="mt-0 mb-2 h3" style="color: #ffd93b;"><%=carslisted[i].Car_category%></h5>
                 <p class="font-italic text-muted mb-0 lead"><%=carslisted[i].Description%> </p>
-                <h6 class="font-weight-bold my-2">₹ <%=history[i].Price%></h6>
+                <h6 class="font-weight-bold my-2">₹ <%=carslisted[i].Price%></h6>
                 <p class="mb-0 "><b>Availability: </b> <%=carslisted[i].Availability%></p> 
                 <p class="mb-0 "><b>Offers: </b> <%=carslisted[i].Offers%></p>
 
-              </div><img src="/resources/<%=carslisted[i].Car_img%>" alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
+              </div><img src="/resources/<%=carslisted[i].Car_img.split(",")[0]%>" alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
             </div>
             <!-- End -->
           </li>
@@ -464,6 +464,9 @@
   </div>
 </div>
 </div>
+</div>
+
+
     
     
     <footer class="blog-footer">
