@@ -3,7 +3,16 @@ body{
   color: #1a202c;
   text-align: left;
  
+ 
 }
+.history{
+  margin-left : 15% !important;
+  margin-right : 15% !important;
+  align-items: center;
+  padding-top: 1%;
+}
+
+
 input:active{
   border-color: #ffd93b;
 }
@@ -38,7 +47,6 @@ input:active{
   background-color: #f1c100;
   border-color: white;
 }
-
 
 .main-body {
   padding: 15px;
