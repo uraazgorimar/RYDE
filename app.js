@@ -120,6 +120,7 @@ app.post("/verification", upload.fields(field), function (req, res) {
 
 
 
+
 app.get("/signInUp", function (req, res) {
   if(!req.session.loggedinUser){
     var msg = '';
@@ -235,6 +236,59 @@ app.post("/signin", upload.none(), function (req, res) {
 //     res.redirect('/')
 //   })
 // })
+app.post("/cars", upload.none(), function(req, res) {
+  var days = "";
+  var from = new Date(req.body.from);
+  var until = new Date(req.body.until);
+  const oneDay = 24 * 60 * 60 * 1000;
+  const diffDays = Math.round(Math.abs((from - until) / oneDay));
+  var weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  console.log(diffDays);
+  if(diffDays > 6) {
+    days = "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday";
+  }
+  else {
+    days += weekday[from.getDay()];
+    for(var i = 1; i< diffDays; i++){
+      days += ","+ weekday[from.getDay() + i];
+    }
+  }
+  console.log(days);
+  con.query("SELECT * FROM booking b RIGHT JOIN car_list c on b.Car_id = c.Car_id WHERE c.City = '" + req.body.where +"' AND c.Availability LIKE '%"+days+"%' AND b.Ongoing = 0;", function(err, result){
+    res.render("carsView", { cars: result });
+    
+  });
+});
+app.get("/booking", function(req, res){
+  console.log(req.query.car_id);
+  
+});
+
+app.get('/list', function (req, res) {
+  res.render("listing");
+});
+app.post("/list", upload.array('rydePaps') ,function (req, res) {
+  var user_id = 1;
+  var images = "";
+  var features = req.body.bluetooth + "," + req.body.airConditioner + "," + req.body.carplayAndroidAuto + "," + req.body.backupCamera;
+  var availability = req.body.sunday + "," + req.body.monday + "," + req.body.tuesday + "," + req.body.wednesday + "," + req.body.thursday + "," + req.body.friday + "," + req.body.saturday;
+  console.log(availability);
+  for(let i = 0; i < req.files.length; i++) {
+    images += req.files[i].filename + ",";
+  }
+  images = images.slice(0,-1)
+  console.log(req.body);
+  console.log(images);
+  con.query("INSERT INTO car_list (User_id, Address, State, City, Zip, Year, Make, Model, Kmpl, No_of_doors, No_of_seats, Fuel_type, Trasmission, Description, Features, Car_img, Car_category, Availability, Price) VALUES ('" + user_id + "','" + req.body.address + "','" + req.body.state + "','" + req.body.city + "','" + req.body.zip + "','" + req.body.year + "','" + req.body.make + "','" + req.body.model + "','" + req.body.kmpl + "','" + req.body.doors + "','" + req.body.seats + "','" + req.body.fuel + "','" + req.body.transmission + "','" + req.body.description + "','" + features + "','" + images + "','" + req.body.category + "','" + availability + "','" + req.body.price +"');", function (err, result) {
+    console.log(result);
+  });
+});
+app.get("/cars", function (req, res) {
+  con.query("SELECT * FROM car_list;", function (err, cars) {
+    console.log(cars);
+  res.render("carsView",{cars:cars});
+  });
+});
 
 
 PORT = process.env.PORT || 8000;
