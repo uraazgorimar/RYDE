@@ -42,7 +42,7 @@
     <div class="container">
       <div class="forms-container">
         <div class="signin-signup">
-          <form action="/signin" method="POST" novalidate class="sign-in-form">
+          <form action="/signin" method="POST" enctype="multipart/form-data" novalidate class="sign-in-form">
             <h2 class="title">Sign in</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
@@ -52,14 +52,12 @@
               <i class="fas fa-lock"></i>
               <input type="password" name="userpass" id="pass" placeholder="Password" />
             </div>
-            <% if (locals.login_errors) { 
-              login_errors.forEach(function(error_msg){ %>
-            <div class="alert alert-danger" role="alert"><%= error_msg %></div>
-            <% });
-            } %>
-            <input style="color: black;  border-radius: 55px;" type="submit" value="Login" class="btn btn-warning" />
+            <% if(alertMsgin!==''){%>
+            <div class="alert alert-danger" role="alert"><%= alertMsgin %></div>
+            <%} %>
+            <button style="color: black; border-radius: 55px;" type="submit" class="btn btn-warning">Sign In</button>
           </form>
-          <form action="/signup" method="POST" novalidate class="sign-up-form">
+          <form action="/signup" method="POST" enctype="multipart/form-data" novalidate class="sign-up-form">
             <h2 class="title">Sign up</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
@@ -67,7 +65,7 @@
             </div>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="password" name="lastname" id="lname" placeholder="Last Name" />
+              <input type="text" name="lastname" id="lname" placeholder="Last Name" />
             </div>
             <div class="input-field">
               <i class="fas fa-envelope"></i>
@@ -75,15 +73,14 @@
             </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>
-              <input type="password" name="userpass" id="rpass" placeholder="Password" />
+              <input type="password" name="userpass" id="rpass" placeholder="Password" required  />
             </div>
-            <% if (locals.register_error) { 
-              register_error.forEach(function(error_msg){ %>
-            <div class="alert alert-danger" role="alert"><%= error_msg %></div>
-            <% });
-            } %>
-            <input style="color: black; border-radius: 55px;" type="submit" class="btn btn-warning" value="Sign up" />
+            <% if(alertMsgup!==''){ %>
+              <div class="alert alert-danger" role="alert"><%= alertMsgup %></div>
+              <%} %>
+            <button style="color: black; border-radius: 55px;" type="submit" class="btn btn-warning">Sign Up</button>
           </form>
+    
         </div>
       </div>
 
@@ -92,8 +89,7 @@
           <div class="content">
             <h3 style="color: #ffd93b;">New here ?</h3>
             <p style="color: white;">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ut iaculis sem, vitae facilisis
-              turpis. Vestibulum imperdiet ex urna, sit.
+             Join many others in an effortless peer to peer car renting service experience ! 
             </p>
             <button class="btn transparent" id="sign-up-btn">
               Sign up
@@ -105,8 +101,7 @@
           <div class="content">
             <h3 style="color:#ffd93b;">One of us ?</h3>
             <p style="color: white;">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
-              laboriosam ad deleniti.
+             Sign in now to rent from hundreds of rydes or to list your ryde and make money !
             </p>
             <button class="btn transparent" id="sign-in-btn">
               Sign in
@@ -128,7 +123,10 @@
       const sign_up_btn = document.querySelector("#sign-up-btn");
       const nav = document.querySelector(".navbar");
       const container = document.querySelector(".container");
-
+      let alertMsgin= '<%-alertMsgin%>' 
+      let alertMsgup = '<%-alertMsgup%>' 
+      console.log(alertMsgin);
+      console.log(alertMsgup);
       sign_up_btn.addEventListener("click", () => {
         container.classList.add("sign-up-mode");
         nav.classList.remove("navbar-light");
@@ -141,6 +139,19 @@
         nav.classList.remove("navbar-dark");
         nav.classList.add("navbar-light");
       });
+      if(alertMsgin!='')
+      {
+        container.classList.remove("sign-up-mode");
+        nav.classList.remove("navbar-dark");
+        nav.classList.add("navbar-light");
+      }
+      else if (alertMsgup!='')
+      {
+        container.classList.add("sign-up-mode");
+        nav.classList.remove("navbar-light");
+        nav.classList.add("navbar-dark");
+      }
+  
     </script>
   </body>
 
