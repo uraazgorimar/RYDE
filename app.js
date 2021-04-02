@@ -17,8 +17,8 @@ const app = express();
 var email = 'abc'
 var con = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "",
+  user: "foo",
+  password: "bar",
   database: "ryde",
 });
 con.connect(function (err) {
@@ -63,7 +63,6 @@ app.use(
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/homepage.html");
   console.log(req.session);
-  console.log(req.session.loggedinUser);
 });
 
 
@@ -302,8 +301,9 @@ app.post("/cars", upload.none(), function(req, res) {
     }
   }
   console.log(days);
-  con.query("SELECT * FROM booking b RIGHT JOIN car_list c on b.Car_id = c.Car_id WHERE c.City = '" + req.body.where +"' AND c.Availability LIKE '%"+days+"%' AND b.Ongoing = 0;", function(err, result){
-    res.render("carsView", { cars: result });
+  con.query("SELECT * FROM booking b RIGHT JOIN car_list c on b.Car_id = c.Car_id WHERE c.City = '" + req.body.where +"' AND c.Availability LIKE '%"+days+"%' AND c.Ongoing = 0;", function(err, result){
+    console.log(result);
+    res.render("carsView", { cars: result, where:req.body.where, from:req.body.from, until:req.body.until, days:diffDays});
     
   });
 });
@@ -332,12 +332,16 @@ app.post("/booking", upload.fields(fields), function(req, res){
 
 
 app.get('/list', function (req, res) {
-  res.render("listing");
+  if(req.session.loggedinUser) {
+    res.render("listing");
+  } else {
+    res.redirect("/signinup")
+  }
+  
 });
 app.post("/list", upload.array('rydePaps') ,function (req, res) {
-  var user_id = 1;
+  var user_id = req.session.user_id;
   var images = "";
-
   for(let i = 0; i < req.files.length; i++) {
     images += req.files[i].filename + ",";
   }
@@ -380,10 +384,24 @@ app.post("/editCar", upload.array('rydePaps') ,function (req, res) {
 });
 //
 app.get("/cars", function (req, res) {
-  con.query("SELECT * FROM car_list;", function (err, cars) {
-    console.log(cars);
-  res.render("carsView",{cars:cars});
-  });
+  var query = req.query.sort;
+  // console.log(query);
+  if (query === "Popular"|| typeof(query)=== "undefined") {
+    con.query("SELECT * FROM car_list;", function (err, cars) {
+      //console.log(cars);
+      res.render("carsView", { cars: cars, where: "", from: "", until: "", days:""});
+    });
+  } else if (query ==="PriceHigh"){
+    con.query("SELECT * FROM car_list ORDER BY Price DESC;", function (err, cars) {
+      //console.log(cars);
+      res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
+    });
+  } else if (query === "PriceLow") {
+    con.query("SELECT * FROM car_list ORDER BY Price ASC;", function (err, cars) {
+      //console.log(cars);
+      res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
+    });
+  }
 });
 
 

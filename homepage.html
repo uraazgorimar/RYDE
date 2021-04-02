@@ -57,30 +57,29 @@
 
             <section class="search-sec">
                 <div class="container">
-                    <form action="#" method="post" novalidate="novalidate">
+                    <form class="needs-validation" novalidate action="/cars" method="post" enctype="multipart/form-data" autocomplete="off">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 col-sm-12 p-0">
                                         <label>Where</label>
                                         <input type="text" class="radius-right form-control search-slt"
-                                            placeholder="City, address, airport or hotel">
+                                            placeholder="City, address, airport or hotel" name="where" id="where">
                                     </div>
                                     <div class="col-lg-3 col-md-4 col-sm-12 p-0">
                                         <label>From</label>
-                                        <input type="datetime-local"
-                                            class="radius-left radius-right form-control search-slt" placeholder="From">
+                                        <input type="datetime-local" class="radius-left radius-right form-control search-slt"
+                                            placeholder="From" name="from" id="from">
                                     </div>
                                     <div class="col-lg-3 col-md-4 col-sm-12 p-0">
                                         <label>Until</label>
-                                        <input type="datetime-local"
-                                            class="radius-left radius-right form-control search-slt"
-                                            placeholder="Until">
+                                        <input type="datetime-local" class="radius-left radius-right form-control search-slt"
+                                            placeholder="Until" name="until" id="until">
                                     </div>
-
+                    
                                     <div class="col-lg-3 col-md-4 col-sm-12 p-0">
                                         <label for>&nbsp;</label>
-                                        <button type="button" class="radius-left btn wrn-btn">Search</button>
+                                        <button type="submit" class="radius-left btn wrn-btn">Search</button>
                                     </div>
                                 </div>
                             </div>

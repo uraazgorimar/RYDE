@@ -49,17 +49,17 @@
                                 <div class="col-lg-3 col-md-4 col-sm-12 p-0">
                                     <label>Where</label>
                                     <input type="text" class="radius-right form-control search-slt"
-                                        placeholder="City, address, airport or hotel" name="where" id="where">
+                                        placeholder="City, address, airport or hotel" name="where" id="where" value="<%= where %>">
                                 </div>
                                 <div class="col-lg-3 col-md-4 col-sm-12 p-0">
                                     <label>From</label>
                                     <input type="datetime-local" class="radius-left radius-right form-control search-slt"
-                                        placeholder="From" name="from" id="from">
+                                        placeholder="From" name="from" id="from" value="<%= from %>">
                                 </div>
                                 <div class="col-lg-3 col-md-4 col-sm-12 p-0">
                                     <label>Until</label>
                                     <input type="datetime-local" class="radius-left radius-right form-control search-slt"
-                                        placeholder="Until" name="until" id="until">
+                                        placeholder="Until" name="until" id="until" value="<%= until %>">
                                 </div>
         
                                 <div class="col-lg-3 col-md-4 col-sm-12 p-0">
@@ -78,13 +78,16 @@
                 Sort By
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="?Default">Popular</a>
-                <a class="dropdown-item" href="?PriceLow">Price Low to High</a>
-                <a class="dropdown-item" href="?PriceHigh">Price High to Low</a>
+                <a class="dropdown-item" href="?sort=Popular">Popular</a>
+                <a class="dropdown-item" href="?sort=PriceLow">Price Low to High</a>
+                <a class="dropdown-item" href="?sort=PriceHigh">Price High to Low</a>
             </div>
         </div>
         <div class="container-fluid d-flex justify-content-center float-sm-none">
             <div class="row my-5">
+                <% if(cars.length === 0) {%> 
+                    <p class="display-4">No cars available.</p>
+                <% } else if(cars.length > 0) { %> 
                 <% for( let i=0; i < cars.length; i++ ) { %>
                 <div class="col-sm-6 col-md-4 col-xl-3">
                     <div class="card my-3"> 
@@ -124,10 +127,11 @@
                                     </div>
                                 </div>
                             </div> <small class="text-muted key pl-3">Standard key Features</small>
-                            <a href="/booking?Car_id=<%= cars[i].Car_id %>"><div class="mx-3 mt-3 mb-2"><button type="button" class="btn btn-warning btn-block book-btn"><small>Book</small></button></div></a>
+                            <a href="/booking?Car_id=<%= cars[i].Car_id %>&from=<%= from %> &until=<%= until %>&days=<%= days %>"><div class="mx-3 mt-3 mb-2"><button type="button" class="btn btn-warning btn-block book-btn"><small>Book</small></button></div></a>
                         </div>
                     </div>
                 </div>
+                <% } %>
                 <% } %>
             </div>
             </div>
