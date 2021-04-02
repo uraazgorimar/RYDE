@@ -1,0 +1,330 @@
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>RYDE</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+            integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="css/style.css">
+        <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="css/footer.css">
+
+    </head>
+
+
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-transparent w-100">
+                <a class="navbar-brand" href="/">RYDE</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse " id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Booking</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Features</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Pricing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Sign in / Sign up</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <main role="main">
+            <section class="video-container">
+                <video autoplay muted loop class="car w-100" src="images/HomepageVideo.mp4"></video>
+                <div class="intro-text">
+                    <h1 class="sentence">Rent&nbsp;a&nbsp;
+                        <div class="slidingVertical">
+                            <span>RYDE</span>
+                            <span>गाड़ी</span>
+                            <span>कार</span>
+                            <span>Vehicle</span>
+                            <span>Car</span>
+                        </div>
+                    </h1>
+                </div>
+            </section>
+            <div>
+
+                <div class="container my-5">
+                    <div style="background-color: white;"
+                        class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">                    
+            <section class="search-sec w-100">
+                <div class="container">
+                    <form class="needs-validation" novalidate action="/cars" method="post" enctype="multipart/form-data" autocomplete="off">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 col-sm-12 p-0">
+                                        <label>Where</label>
+                                        <input type="text" class="radius-right form-control search-slt"
+                                            placeholder="City, address, airport or hotel" name="where" id="where">
+                                    </div>
+                                    <div class="col-lg-3 col-md-4 col-sm-12 p-0">
+                                        <label>From</label>
+                                        <input type="datetime-local" class="radius-left radius-right form-control search-slt"
+                                            placeholder="From" name="from" id="from">
+                                    </div>
+                                    <div class="col-lg-3 col-md-4 col-sm-12 p-0">
+                                        <label>Until</label>
+                                        <input type="datetime-local" class="radius-left radius-right form-control search-slt"
+                                            placeholder="Until" name="until" id="until">
+                                    </div>
+                    
+                                    <div class="col-lg-3 col-md-4 col-sm-12 p-0">
+                                        <label for>&nbsp;</label>
+                                        <button type="submit" class="radius-left btn wrn-btn">Search</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
+                        <div class="container marketing text-center">
+                            <!-- START THE FEATURETTES -->
+                            <hr class="f">
+                            <h2 style="margin-top: 1rem !important;" class="featurette-heading pt-5">Peer to Peer. <span
+                                    class="text-muted">Rental
+                                    Sevices.</span></h2>
+                            <p class="lead">Want to make some money? Give your RYDE for a spin.</p>
+                            <p class="lead pb-5">Want best cars with the best prices? Take a RYDE for a spin.</p>
+                            <hr class="f">
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Start carousel -->
+                <div class="container my-5">
+                    <div style="background-color: white;"
+                        class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+
+                        <section>
+                            <div class="container text-center">
+                                <h2 style="margin-top: 1rem !important;" class="featurette-heading">Car categories</h2>
+                                <br>
+                                <div class="row mx-auto my-auto">
+                                    <div id="recipeCarousel" class="carousel slide w-100" data-ride="carousel">
+                                        <div class="carousel-inner w-100" role="listbox">
+                                            <div class="carousel-item active">
+                                                <div class="col-md-4">
+                                                    <div class="card">
+                                                        <img class="card-img-top"
+                                                            src="https://images.unsplash.com/photo-1469285994282-454ceb49e63c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1051&q=80"
+                                                            alt="Car image">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Convertibles</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="carousel-item">
+                                                <div class="col-md-4">
+                                                    <div class="card">
+                                                        <img class="card-img-top"
+                                                            src="https://images.unsplash.com/photo-1584842486765-1fd648870a30?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+                                                            alt="Car image">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Coupes</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="carousel-item">
+                                                <div class="col-md-4">
+                                                    <div class="card">
+                                                        <img class="card-img-top h-100"
+                                                            src="https://images.unsplash.com/photo-1572811298797-9eecadf6cb24?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+                                                            alt="Car image">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Hatchbacks</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="carousel-item">
+                                                <div class="col-md-4">
+                                                    <div class="card">
+                                                        <img class="card-img-top"
+                                                            src="https://images.pexels.com/photos/5463066/pexels-photo-5463066.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                                                            alt="Car image">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Minivans</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="carousel-item">
+                                                <div class="col-md-4">
+                                                    <div class="card">
+                                                        <img class="card-img-top"
+                                                            src="https://images.pexels.com/photos/951318/pexels-photo-951318.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                                                            alt="Car image">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Sedans</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="carousel-item">
+                                                <div class="col-md-4">
+                                                    <div class="card">
+                                                        <img class="card-img-top"
+                                                            src="https://images.pexels.com/photos/2676096/pexels-photo-2676096.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260"
+                                                            alt="Car image">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">SUVs</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="carousel-item">
+                                                <div class="col-md-4">
+                                                    <div class="card">
+                                                        <img class="card-img-top"
+                                                            src="https://images.unsplash.com/photo-1464219789935-c2d9d9aba644?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1050&q=80"
+                                                            alt="Car image">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Vans</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="carousel-item">
+                                                <div class="col-md-4">
+                                                    <div class="card">
+                                                        <img class="card-img-top"
+                                                            src="https://images.unsplash.com/photo-1612322079729-4d8e331c2189?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+                                                            alt="Car image">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Exotic Luxuries</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="carousel-item">
+                                                <div class="col-md-4">
+                                                    <div class="card">
+                                                        <img class="card-img-top"
+                                                            src="https://images.unsplash.com/photo-1517271710308-aa99f1519490?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1051&q=80"
+                                                            alt="Car image">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Classics</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a class=" carousel-control-prev w-auto" href="#recipeCarousel" role="button"
+                                            data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next w-auto" href="#recipeCarousel" role="button"
+                                            data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="container marketing">
+
+                    <!-- START THE FEATURETTES -->
+                    <div style="background-color: white;"
+                        class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+                        <div class="row featurette">
+                            <div class="col-md-7">
+                                <h2 class="featurette-heading">Re-inventing car renting in India. <span
+                                        class="text-muted">RYDE
+                                        better.</span></h2>
+                                <p class="lead">Rent cars according to your needs and budget from our various
+                                    categories. We
+                                    are
+                                    here to help you make memorable RYDES.</p>
+                                <button type="button" class="btn explore-btn">Explore More</button>
+                            </div>
+                            <div class="col-md-5">
+                                <img src="images/RYDE.gif" class="featurette-image img-fluid mx-auto" width="500"
+                                    height="500" alt="GIF">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <br><br>
+                    <div style="background-color: white;"
+                        class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+                        <div class="row featurette">
+                            <div class="col-md-7 order-md-2">
+                                <h2 class="featurette-heading">Have a lazy RYDE?<span class="text-muted"> Let it
+                                        make money for
+                                        you.</h2></span>
+                                </h2>
+                                <p class="lead">Do you have that one neglected car which no one wants to use? Rent
+                                    out your car
+                                    when not in use to earn money at a go.</p>
+                                <button type="button" class="btn explore-btn">Explore More</button>
+                            </div>
+                            <div class="col-md-5 order-md-1">
+                                <img src="images/money.gif" class="featurette-image img-fluid mx-auto" width="500"
+                                    height="500" alt="GIF">
+                            </div>
+                        </div>
+                    </div>
+                    <br><br>
+                    <!-- /END THE FEATURETTES -->
+                </div><!-- /.container -->
+            </div>
+            </div>
+        </main>
+       <%- include("footer") %> 
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+            </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous">
+            </script>
+        <script>
+            $('#recipeCarousel').carousel({
+                interval: 10000
+            })
+
+            $('.carousel .carousel-item').each(function () {
+                var minPerSlide = 4;
+                var next = $(this).next();
+                if (!next.length) {
+                    next = $(this).siblings(':first');
+                }
+                next.children(':first-child').clone().appendTo($(this));
+
+                for (var i = 0; i < minPerSlide; i++) {
+                    next = next.next();
+                    if (!next.length) {
+                        next = $(this).siblings(':first');
+                    }
+
+                    next.children(':first-child').clone().appendTo($(this));
+                }
+            });
+
+            
+        </script>
+
+    </body>
+
+</html>
