@@ -73,14 +73,15 @@ app.get('/viewProfile', function (req, res) {
    
     con.query("SELECT COUNT(*) AS Count FROM booking where Rentee_id='" + result[0].User_id + "';", function (err, countdrive) {
     
-      con.query("SELECT COUNT(*) AS rydes FROM booking where Owner_id='" + result[0].User_id + "';", function (err, countryde) {
-
+      con.query("SELECT COUNT(*) AS rydes FROM car_list where User_id='" + result[0].User_id + "';", function (err, countryde) {
+      
         con.query("SELECT * from booking b left join car_list c on b.Car_id=c.Car_id where b.Rentee_id= '"+result[0].User_id + "';", function (err, history) {
           
           con.query("SELECT * from car_list where user_id='"+result[0].User_id + "';", function (err, carslisted) {
 
             con.query("SELECT * from user_reviews u left join user_info i on u.reviewer_id=i.user_id where reviewee_id='"+result[0].User_id + "';", function (err, reviews) {
-              console.log(reviews);
+              
+            
           
         res.render('viewProfile', { profile: result, countdrive:countdrive[0].Count, countrydes:countryde[0].rydes, history:history, carslisted:carslisted, reviews:reviews });
       });
@@ -96,19 +97,66 @@ app.post("/viewProfile", upload.single('photo'), function (req, res) {
   console.log(req.file);
   var filename= req.file;
   if(typeof filename==='undefined') {
-    con.query("UPDATE user_info SET State='"+req.body.state+"',City='"+req.body.City+"',Zip='"+req.body.zip+"',Description='"+req.body.description+"' WHERE Email='"+ email +"';",function (errors, result) {
+    con.query("UPDATE user_info SET State='"+req.body.state+"',City='"+req.body.City+"',Zip='"+req.body.zip+"',user_description='"+req.body.description+"' WHERE Email='"+ email +"';",function (errors, result) {
       console.log(errors);
       res.redirect("/viewProfile");
     });
   }
   else {
-    con.query("UPDATE user_info SET State='"+req.body.state+"',City='"+req.body.City+"',Zip='"+req.body.zip+"',Profile_photo='"+req.file.filename+"',Description='"+req.body.description+"' WHERE Email='"+ email +"';",function (errors, result) {
-      console.log(errors);
+    con.query("UPDATE user_info SET State='"+req.body.state+"',City='"+req.body.City+"',Zip='"+req.body.zip+"',Profile_photo='"+req.file.filename+"',user_description='"+req.body.description+"' WHERE Email='"+ email +"';",function (errors, result) {
+      
       res.redirect("/viewProfile");
     });
   }
+
   
 });
+
+app.post('/viewReview',upload.none(), function (req, res) {
+  console.log(req.body);
+
+  con.query("INSERT INTO car_reviews (User_id, Review, Stars, Car_id) VALUES ('"+req.body.u+"','"+req.body.Review+"','"+req.body.rating+"','"+req.body.Car_id+"');",function (errors, result) {
+  
+   res.redirect("/viewProfile")
+  });
+  
+});
+  
+
+//user profile
+app.get('/userprofile', function (req, res) {
+  con.query("SELECT * FROM user_info where User_id='" + req.query.User_id + "';", function (err, result) {
+   
+    con.query("SELECT COUNT(*) AS Count FROM booking where Rentee_id='" + result[0].User_id + "';", function (err, countdrive) {
+    
+      con.query("SELECT COUNT(*) AS rydes FROM car_list where User_id='" + result[0].User_id + "';", function (err, countryde) {
+
+        con.query("SELECT * from booking b left join car_list c on b.Car_id=c.Car_id where b.Rentee_id= '"+result[0].User_id + "';", function (err, history) {
+          
+          con.query("SELECT * from car_list where user_id='"+result[0].User_id + "';", function (err, carslisted) {
+
+            con.query("SELECT * from user_reviews u left join user_info i on u.reviewer_id=i.user_id where reviewee_id='"+result[0].User_id + "';", function (err, reviews) {
+              
+              con.query("SELECT User_id FROM user_info where Email='" + email + "';", function (err, userid) {
+                
+        res.render('userprofile', { profile: result, countdrive:countdrive[0].Count, countrydes:countryde[0].rydes, history:history, carslisted:carslisted, reviews:reviews, userid:userid });
+      });
+    });
+    });
+    });
+    });
+    });
+  });
+});
+
+  app.post('/userprofile',upload.none(), function (req, res) {
+    con.query("INSERT INTO user_reviews (Stars, Reviews, Reviewer_id, reviewee_id) VALUES ('"+req.body.rating+"','"+req.body.Review+"','"+req.body.reviewer+"','"+req.body.reviewee+"');",function (errors, result) {
+      res.redirect('/userprofile?User_id='+req.body.reviewee);
+     
+    });
+  });
+
+
 var field= [{name:'aadhar', maxCount:1},{name:'license',maxCount:1}];
 app.post("/verification", upload.fields(field), function (req, res) {
   con.query("UPDATE user_info SET License='"+req.files.aadhar[0].filename+"',Verification='"+req.files.license[0].filename+"'WHERE Email='"+email+"';",function (errors, result) {
@@ -259,10 +307,29 @@ app.post("/cars", upload.none(), function(req, res) {
     
   });
 });
+
 app.get("/booking", function(req, res){
-  console.log(req.query.car_id);
+ carid=req.query.Car_id;
   
-});
+  con.query("SELECT * from car_list c LEFT JOIN user_info u ON c.User_id=u.User_id where Car_id='"+carid+"';", function(err, booking){
+    console.log(booking);
+    con.query("SELECT * from car_reviews c LEFT JOIN user_info u ON c.User_id=u.User_id where Car_id='"+carid+"';", function(err, car_reviews){
+      con.query("SELECT round(avg(stars),1) as 'avg' from car_reviews where Car_id='"+carid+"';", function(err, car_stars){
+        con.query("SELECT * FROM user_info WHERE Email ='"+email+"';", function(err, booking1){
+    res.render("booking",{booking:booking,car_reviews:car_reviews,car_stars:car_stars, booking1:booking1,from:req.query.from, until:req.query.until, days:req.query.days});
+          });
+        });
+      });
+    });
+  });
+  var fields= [{name:'aadhar', maxCount:1},{name:'license',maxCount:1}];
+app.post("/booking", upload.fields(fields), function(req, res){
+  con.query("UPDATE user_info SET License='"+req.files.aadhar[0].filename+"',Verification='"+req.files.license[0].filename+"',Mobile='"+req.body.mobile+"'WHERE Email='"+email+"';",function (errors, result) {
+    console.log(errors);
+})
+})
+
+
 
 app.get('/list', function (req, res) {
   res.render("listing");
@@ -270,19 +337,48 @@ app.get('/list', function (req, res) {
 app.post("/list", upload.array('rydePaps') ,function (req, res) {
   var user_id = 1;
   var images = "";
-  var features = req.body.bluetooth + "," + req.body.airConditioner + "," + req.body.carplayAndroidAuto + "," + req.body.backupCamera;
-  var availability = req.body.sunday + "," + req.body.monday + "," + req.body.tuesday + "," + req.body.wednesday + "," + req.body.thursday + "," + req.body.friday + "," + req.body.saturday;
-  console.log(availability);
+
   for(let i = 0; i < req.files.length; i++) {
     images += req.files[i].filename + ",";
   }
   images = images.slice(0,-1)
   console.log(req.body);
   console.log(images);
-  con.query("INSERT INTO car_list (User_id, Address, State, City, Zip, Year, Make, Model, Kmpl, No_of_doors, No_of_seats, Fuel_type, Trasmission, Description, Features, Car_img, Car_category, Availability, Price) VALUES ('" + user_id + "','" + req.body.address + "','" + req.body.state + "','" + req.body.city + "','" + req.body.zip + "','" + req.body.year + "','" + req.body.make + "','" + req.body.model + "','" + req.body.kmpl + "','" + req.body.doors + "','" + req.body.seats + "','" + req.body.fuel + "','" + req.body.transmission + "','" + req.body.description + "','" + features + "','" + images + "','" + req.body.category + "','" + availability + "','" + req.body.price +"');", function (err, result) {
+  con.query("INSERT INTO car_list (User_id, Address, State, City, Zip, Year, Make, Model, Kmpl, No_of_doors, No_of_seats, Fuel_type, Trasmission, Description, Features, Car_img, Car_category, Availability, Price) VALUES ('" + user_id + "','" + req.body.address + "','" + req.body.state + "','" + req.body.city + "','" + req.body.zip + "','" + req.body.year + "','" + req.body.make + "','" + req.body.model + "','" + req.body.kmpl + "','" + req.body.doors + "','" + req.body.seats + "','" + req.body.fuel + "','" + req.body.transmission + "','" + req.body.description + "','" + req.body.features + "','" + images + "','" + req.body.category + "','" + req.body.availability + "','" + req.body.price +"');", function (err, result) {
     console.log(result);
+    res.redirect("/viewProfile");        
   });
 });
+
+//
+app.get('/editCar', function (req, res) {
+  con.query("SELECT * FROM car_list where Car_id ='"+req.query.Car_id+"';", function (err, edit) {
+    res.render("editCar", {edit:edit});
+  });
+
+});
+app.post("/editCar", upload.array('rydePaps') ,function (req, res) {
+
+
+  var user_id = 1;
+  var images = "";
+  
+  for(let i = 0; i < req.files.length; i++) {
+    images += req.files[i].filename + ",";
+  }
+  images = images.slice(0,-1)
+  console.log(req.body);
+  console.log(images);
+  con.query("SELECT Car_img from car_list where Car_id ='"+req.body.carid+"';", function (err, img) {
+    console.log(img);
+    images+=img[0].Car_img;
+    console.log(images);
+ con.query("UPDATE car_list set User_id='" + user_id + "', Address='" + req.body.address + "',State='" + req.body.state + "',City='" + req.body.city + "',Zip='" + req.body.zip + "',Year='" + req.body.year + "',Make='" + req.body.make + "', Model='" + req.body.model + "',Kmpl='" + req.body.kmpl + "',No_of_doors='" + req.body.doors + "',No_of_seats='" + req.body.seats + "',Fuel_type='" + req.body.fuel + "',Trasmission='" + req.body.transmission + "',Description='" + req.body.description + "',Features='" + req.body.features + "',Car_img='" + images + "',Car_category='" + req.body.category + "',Availability='" + req.body.availability + "',Price='" + req.body.price +"' where Car_id='"+req.body.carid+"';", function (err, result) {
+ res.redirect("/booking?Car_id="+req.body.carid)
+});
+});
+});
+//
 app.get("/cars", function (req, res) {
   con.query("SELECT * FROM car_list;", function (err, cars) {
     console.log(cars);

@@ -42,32 +42,33 @@
 
     <div class="container">
         <div class="py-5 text-center">
-            <h1 class="display-4">List a <span class="yellow-text display-4">Ryde.</span></h1>
-            <p class="lead">Enter the following details about your ryde and sit back while it works for you.</p>
+            <h1 class="display-4">Edit your <span class="yellow-text display-4">Ryde.</span></h1>
+            <p class="lead">Edit the following details about your ryde and sit back while it works for you.</p>
         </div>
         <hr class="mb-4">
         <div class="col-md-12 order-md-1">
-            <form class="needs-validation" novalidate action="/list" method="post" enctype="multipart/form-data" autocomplete="off">
+            <form class="needs-validation" novalidate action="/editCar" method="post" enctype="multipart/form-data" autocomplete="off">
                 <h5 class="yellow-text">Your Ryde</h5>
                 <span class="text-muted">Where is the car located?</span>
                 <div class="row">
                     <div class="col-md-3 mb-3">
                         <label for="address">Address</label>
-                        <input type="text" class="form-control" id="address" placeholder="" value="" name="address" required>
+                        <input type="text" class="form-control" id="address" placeholder="<%=edit[0].Address%>" value="<%=edit[0].Address%>" name="address" required>
                         <div class="invalid-feedback">
                             Valid address is required.
                         </div>
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="city">City</label>
-                        <input type="text" class="form-control" id="city" placeholder="" value="" name="city" required>
+                        <input type="text" class="form-control" id="city" placeholder="<%=edit[0].City%>" value="<%=edit[0].City%>" name="city" required>
                         <div class="invalid-feedback">
                             Valid city is required.
                         </div>
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="state">State</label>
-                        <select name="state" id="state" class="form-control" required>
+                        <select name="state" id="state" class="form-control" placeholder="<%=edit[0].State%>" value="<%=edit[0].State%>" required>
+                            <option value="<%=edit[0].State%>"><%=edit[0].State%></option>
                             <option value="Andhra Pradesh">Andhra Pradesh</option>
                             <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
                             <option value="Arunachal Pradesh">Arunachal Pradesh</option>
@@ -111,7 +112,7 @@
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="zip">Zip</label>
-                        <input type="text" class="form-control" id="zip" placeholder="" value="" name="zip" required>
+                        <input type="text" class="form-control" id="zip" placeholder="<%=edit[0].Zip%>" value="<%=edit[0].Zip%>" name="zip" required>
                         <div class="invalid-feedback">
                             Zip code is required.
                         </div>
@@ -121,7 +122,7 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="year">Year</label>
-                        <input type="number" class="form-control" id="year" placeholder="" name="year" value="" required min="1981"
+                        <input type="number" class="form-control" id="year" placeholder="<%=edit[0].Year%>" name="year" value="<%=edit[0].Year%>" required min="1981"
                             max="2021">
                         <div class="invalid-feedback">
                             Year is required.
@@ -129,7 +130,8 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="category">Car Category</label>
-                        <select name="category" id="category"  class="form-control" required>
+                        <select name="category" id="category"  class="form-control" value="<%=edit[0].Car_category%>" required>
+                            <option value="<%=edit[0].Car_category%>"><%=edit[0].Car_category%></option>
                             <option value="SUV">SUV</option>
                             <option value="Sedan">Sedan</option>
                             <option value="Hatchback">Hatchback</option>
@@ -144,7 +146,7 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="make">Make</label>
-                        <input type="text" class="form-control" id="make" name="make" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="make" name="make" placeholder="<%=edit[0].Make%>" value="<%=edit[0].Make%>" required>
                         <div class="invalid-feedback">
                             Make of car is required.
                         </div>
@@ -153,21 +155,21 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="model">Model</label>
-                        <input type="text" class="form-control" id="model" name="model" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="model" name="model" placeholder="<%=edit[0].Model%>" value="<%=edit[0].Model%>" required>
                         <div class="invalid-feedback">
                             Model is required.
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="kmpl">KM/L</label>
-                        <input type="text" class="form-control" id="kmpl" name="kmpl" placeholder="" value="" required>
+                        <input type="text" class="form-control" id="kmpl" name="kmpl" placeholder="<%=edit[0].Kmpl%>" value="<%=edit[0].Kmpl%>" required>
                         <div class="invalid-feedback">
                             KM/L is required.
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="doors">Number of Doors</label>
-                        <input type="number" class="form-control" id="doors" name="doors" placeholder="" value="" required min="1"
+                        <input type="number" class="form-control" id="doors" name="doors" placeholder="<%=edit[0].No_of_doors%>" value="<%=edit[0].No_of_doors%>" required min="1"
                             max="5">
                         <div class="invalid-feedback">
                             Number of doors is required.
@@ -177,14 +179,15 @@
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="seats">Number of Seats</label>
-                        <input type="number" class="form-control" id="seats" name="seats" placeholder="" value="" required min="1" max="10">
+                        <input type="number" class="form-control" id="seats" name="seats" placeholder="<%=edit[0].No_of_seats%>" value="<%=edit[0].No_of_seats%>" required min="1" max="10">
                         <div class="invalid-feedback">
                             Number of Seats is required.
                         </div>
                     </div>
                     <div class="col-md-4 mb-3 form-group">
                         <label for="fuel">Fuel Type</label>
-                        <select class="form-control" id="fuel" name="fuel" required>
+                        <select class="form-control" id="fuel" name="fuel" value="<%=edit[0].Fuel_type%>" required>
+                            <option><%=edit[0].Fuel_type%></option>
                             <option>Petrol</option>
                             <option>Diesel</option>
                             <option>CNG</option>
@@ -219,7 +222,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="price">Price of car per hour<span class="text-muted"> (in rupees)</span></label>
                         <br>
-                        <input type="number" class="form-control" id="price" name="price" placeholder="" value="" required min="1">
+                        <input type="number" class="form-control" id="price" name="price" placeholder="<%=edit[0].Price%>" value="<%=edit[0].Price%>" required min="1">
                         <div class="invalid-feedback">
                             Price is required.
                         </div>
@@ -229,8 +232,8 @@
                     <div class="col-md-12 mb-3">
                         <label for="description">Car description</label>
                         <br>
-                        <textarea class="form-control" name="description" id="carDescription" name="carDescription" cols="60" rows="5"
-                            placeholder="A good detailed description will get you more trips." required></textarea>
+                        <input class="form-control" name="description" id="carDescription" name="carDescription" 
+                       value="<%=edit[0].Description%>" required></input>
                         <div class="invalid-feedback">
                             Description is required.
                         </div>
@@ -242,51 +245,106 @@
                         <label for="description">Car features</label>
                         <br>
                         <div class="col-md-3 mb-3 form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="hybrid" name="features" value="hybrid">
+                            <% if (edit[0].Features.includes("hybrid") ){%> 
+                                <input class="form-check-input" type="checkbox" id="hybrid" name="features" value="hybrid" checked>
+                            <% } else{ %> 
+                                <input class="form-check-input" type="checkbox" id="hybrid" name="features" value="hybrid">
+                                <% } %> 
                             <label class="form-check-label" for="hybrid">Hybrid</label>
                         </div>
                         <div class="col-md-3 mb-3 form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="bluetooth" name="features" value="bluetooth">
+                            <% if (edit[0].Features.includes("bluetooth") ){%> 
+                            <input class="form-check-input" type="checkbox" id="bluetooth" name="features" value="bluetooth"checked>
+                            <% } else{ %> 
+                                <input class="form-check-input" type="checkbox" id="bluetooth" name="features" value="bluetooth">
+                                <% } %> 
                             <label class="form-check-label" for="bluetooth">Bluetooth</label>
                         </div>
                         <div class="col-md-3 mb-3 form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="airConditioner" name="features" value="airConditioner">
+                            <% if (edit[0].Features.includes("airConditioner") ){%> 
+                                <input class="form-check-input" type="checkbox" id="airConditioner" name="features" value="airConditioner"checked>
+                            <% } else{ %> 
+                                <input class="form-check-input" type="checkbox" id="airConditioner" name="features" value="airConditioner">
+                                <% } %> 
                             <label class="form-check-label" for="airConditioner">Air-Conditioner</label>
                         </div>
                         <div class="col-md-3 mb-3 form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="carplayAndroidAuto" name="features" value="carplayAndroidAuto">
+                            <% if (edit[0].Features.includes("carplayAndroidAuto") ){%> 
+                                <input class="form-check-input" type="checkbox" id="carplayAndroidAuto" name="features" value="carplayAndroidAuto"checked>
+                            <% } else{ %> 
+                                <input class="form-check-input" type="checkbox" id="carplayAndroidAuto" name="features" value="carplayAndroidAuto">
+                                <% } %> 
                             <label class="form-check-label" for="carplayAndroidAuto">Carplay / Android Auto</label>
                         </div>
                         <div class="col-md-3 mb-3 form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="backupCamera" name="features" value="backupCamera">
+                            <% if (edit[0].Features.includes("backupCamera") ){%>
+                                <input class="form-check-input" type="checkbox" id="backupCamera" name="features" value="backupCamera"checked>
+                            <% } else{ %> 
+                                <input class="form-check-input" type="checkbox" id="backupCamera" name="features" value="backupCamera">
+                                <% } %> 
                             <label class="form-check-label" for="backupCamera">Backup Camera</label>
                         </div>
                         <div class="col-md-3 mb-3 form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="fastUsbCharge" name="features" value="fastUsbCharge">
+                            <% if (edit[0].Features.includes("fastUsbCharge") ){%>
+                                <input class="form-check-input" type="checkbox" id="fastUsbCharge" name="features" value="fastUsbCharge"checked>
+                                <% } else{ %>
+                                    <input class="form-check-input" type="checkbox" id="fastUsbCharge" name="features" value="fastUsbCharge">
+
+                                <% } %>  
                             <label class="form-check-label" for="fastUsbCharge">Fast USB charging</label>
                         </div>
                         <div class="col-md-3 mb-3 form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="dualFrontAirbags" name="features" value="dualFrontAirbags">
+                            <% if (edit[0].Features.includes("dualFrontAirbags") ){%>
+                                <input class="form-check-input" type="checkbox" id="dualFrontAirbags" name="features" value="dualFrontAirbags"checked>
+                                <% } else{ %> 
+                                    <input class="form-check-input" type="checkbox" id="dualFrontAirbags" name="features" value="dualFrontAirbags">
+
+                                <% } %> 
                             <label class="form-check-label" for="dualFrontAirbags">Dual Front Airbags</label>
                         </div>
                         <div class="col-md-3 mb-3 form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="rearDefoggerWiper" name="features" value="rearDefoggerWiper">
+                            <% if (edit[0].Features.includes("rearDefoggerWiper") ){%>
+                                <input class="form-check-input" type="checkbox" id="rearDefoggerWiper" name="features" value="rearDefoggerWiper"checked>
+                                <% } else{ %> 
+                                    <input class="form-check-input" type="checkbox" id="rearDefoggerWiper" name="features" value="rearDefoggerWiper">
+
+                                <% } %> 
                             <label class="form-check-label" for="rearDefoggerWiper">Rear Defogger / Wiper</label>
                         </div>
                         <div class="col-md-3 mb-3 form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="keylessEntry" name="features" value="keylessEntry">
+                            <% if (edit[0].Features.includes("keylessEntry") ){%>
+                                <input class="form-check-input" type="checkbox" id="keylessEntry" name="features" value="keylessEntry"checked>
+                                <% } else{ %> 
+                                    <input class="form-check-input" type="checkbox" id="keylessEntry" name="features" value="keylessEntry">
+
+                                <% } %> 
                             <label class="form-check-label" for="keylessEntry">Keyless Entry</label>
                         </div>
                         <div class="col-md-3 mb-3 form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="headsUpDisplay" name="features" value="headsUpDisplay">
+                            <% if (edit[0].Features.includes("headsUpDisplay") ){%>
+                                <input class="form-check-input" type="checkbox" id="headsUpDisplay" name="features" value="headsUpDisplay"checked>
+                                <% } else{ %> 
+                                    <input class="form-check-input" type="checkbox" id="headsUpDisplay" name="features" value="headsUpDisplay">
+
+                                <% } %> 
                             <label class="form-check-label" for="headsUpDisplay">Heads up Display</label>
                         </div>
                         <div class="col-md-3 mb-3 form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="heatedSeats" name="features" value="heatedSeats">
+                            <% if (edit[0].Features.includes("heatedSeats") ){%>
+                                <input class="form-check-input" type="checkbox" id="heatedSeats" name="features" value="heatedSeats"checked>
+                                <% } else{ %>
+                                    <input class="form-check-input" type="checkbox" id="heatedSeats" name="features" value="heatedSeats">
+ 
+                                <% } %> 
                             <label class="form-check-label" for="heatedSeats">Heated Seats</label>
                         </div>
                         <div class="col-md-3 mb-3 form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="cruiseControl" name="features" value="cruiseControl">
+                            <% if (edit[0].Features.includes("cruiseControl") ){%>
+                                <input class="form-check-input" type="checkbox" id="cruiseControl" name="features" value="cruiseControl"checked>
+                                <% } else{ %> 
+                                    <input class="form-check-input" type="checkbox" id="cruiseControl" name="features" value="cruiseControl">
+
+                                <% } %> 
                             <label class="form-check-label" for="cruiseControl">Cruise Control</label>
                         </div>
                     </div>
@@ -296,45 +354,75 @@
                         <label for="description">Car Availability</label>
                         <br>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="sunday" name="availability" value="Sunday">
+                            <% if (edit[0].Availability.includes("Sunday") ){%>
+                                <input class="form-check-input" type="checkbox" id="sunday" name="availability" value="Sunday" checked>
+                            <% } else{ %> 
+                                <input class="form-check-input" type="checkbox" id="sunday" name="availability" value="Sunday">
+                                <% } %> 
                             <label class="form-check-label" for="sunday">Sunday</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="monday" name="availability" value="Monday">
+                            <% if (edit[0].Availability.includes("Monday") ){%>
+                                <input class="form-check-input" type="checkbox" id="monday" name="availability" value="Monday" checked>
+                            <% } else{ %> 
+                                <input class="form-check-input" type="checkbox" id="monday" name="availability" value="Monday">
+                                <% } %> 
                             <label class="form-check-label" for="monday">Monday</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="tuesday" name="availability"
+                            <% if (edit[0].Availability.includes("Tuesday") ){%>
+                                <input class="form-check-input" type="checkbox" id="tuesday" name="availability"
+                                value="Tuesday" checked>
+                                <% } else{ %> 
+                                    
+                                    <input class="form-check-input" type="checkbox" id="tuesday" name="availability"
                                 value="Tuesday">
+                                    <% } %> 
                             <label class="form-check-label" for="tuesday">Tuesday</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="wednesday" name="availability"
+                            <% if (edit[0].Availability.includes("Wednesday") ){%>
+                                <input class="form-check-input" type="checkbox" id="wednesday" name="availability"
+                                value="Wednesday" checked>
+                                <% } else{ %> 
+                                    <input class="form-check-input" type="checkbox" id="wednesday" name="availability"
                                 value="Wednesday">
+                                    <% } %> 
                             <label class="form-check-label" for="wednesday">Wednesday</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="thursday" name="availability" value="Thursday">
+                            <% if (edit[0].Availability.includes("Thursday") ){%>
+                                <input class="form-check-input" type="checkbox" id="thursday" name="availability" value="Thursday" checked>
+                            <% } else{ %> 
+                                <input class="form-check-input" type="checkbox" id="thursday" name="availability" value="Thursday">
+                                <% } %> 
                             <label class="form-check-label" for="thursday">Thursday</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="friday" name="availability" value="Friday">
+                            <% if (edit[0].Availability.includes("Friday") ){%>
+                                <input class="form-check-input" type="checkbox" id="friday" name="availability" value="Friday" checked>
+                            <% } else{ %> 
+                                <input class="form-check-input" type="checkbox" id="friday" name="availability" value="Friday">
+                                <% } %> 
                             <label class="form-check-label" for="friday">Friday</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="saturday" name="availability" value="Saturday">
+                            <% if (edit[0].Availability.includes("Saturday") ){%>
+                                <input class="form-check-input" type="checkbox" id="saturday" name="availability" value="Saturday" checked>
+                            <% } else{ %> 
+                                <input class="form-check-input" type="checkbox" id="saturday" name="availability" value="Saturday">
+                                <% } %> 
                             <label class="form-check-label" for="saturday">Saturday</label>
                         </div>
                     </div>
                 </div>
                 <hr class="mb-4">
                 <div class="col-md-4 custom-file">
-                    <input type="file" class="custom-file-input" id="rydePaps" accept="image/*" name="rydePaps" multiple required>
-                    <label class="custom-file-label" for="rydePaps">Pictures of Ryde</label>
-                    <div class="invalid-feedback">
-                        Minimum 5 pictures is required.
-                    </div>
+                    <input type="file" class="custom-file-input" id="rydePaps"  accept="image/*" name="rydePaps" multiple>
+                    <label class="custom-file-label" for="rydePaps">Add More Pictures of Ryde</label>
                 </div>
+
+                <input type="hidden" value="<%= edit[0].Car_id%>" name="carid">
                 
                 
                 <hr class="mb-4">
@@ -365,19 +453,14 @@
             window.addEventListener('load', function () {
                 // Fetch all the forms we want to apply custom Bootstrap validation styles to
                 var forms = document.getElementsByClassName('needs-validation');
-                var $fileUpload = $("input[type='file']");
                 // Loop over them and prevent submission
                 var validation = Array.prototype.filter.call(forms, function (form) {
                     form.addEventListener('submit', function (event) {
-                        if (form.checkValidity() === false || parseInt($fileUpload.get(0).files.length) < 5) {
+                        if (form.checkValidity() === false) {
                             event.preventDefault();
                             event.stopPropagation();
                         }
-                        if (parseInt($fileUpload.get(0).files.length) < 5) {
-                            alert("Please upload at least 5 images of ryde.");
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
+                        
                         form.classList.add('was-validated');
                     }, false);
                 });
