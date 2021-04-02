@@ -17,8 +17,8 @@ const app = express();
 var email = 'abc'
 var con = mysql.createConnection({
   host: "localhost",
-  user: "foo",
-  password: "bar",
+  user: "root",
+  password: "2002",
   database: "ryde",
 });
 con.connect(function (err) {
@@ -28,7 +28,7 @@ con.connect(function (err) {
 
 
 app.use(express.static('public'));
-app.use('/resources',express.static(__dirname+'/uploads'));
+app.use('/resources', express.static(__dirname + '/uploads'));
 app.set('view engine', 'ejs');
 
 
@@ -69,7 +69,7 @@ app.get("/", function (req, res) {
 
 app.get('/viewProfile', function (req, res) {
   con.query("SELECT * FROM user_info where Email='" + email + "';", function (err, result) {
-   
+
     con.query("SELECT COUNT(*) AS Count FROM booking where Rentee_id='" + result[0].User_id + "';", function (err, countdrive) {
     
       con.query("SELECT COUNT(*) AS rydes FROM car_list where User_id='" + result[0].User_id + "';", function (err, countryde) {
@@ -79,17 +79,16 @@ app.get('/viewProfile', function (req, res) {
           con.query("SELECT * from car_list where user_id='"+result[0].User_id + "';", function (err, carslisted) {
 
             con.query("SELECT * from user_reviews u left join user_info i on u.reviewer_id=i.user_id where reviewee_id='"+result[0].User_id + "';", function (err, reviews) {
-              
-            
+
           
         res.render('viewProfile', { profile: result, countdrive:countdrive[0].Count, countrydes:countryde[0].rydes, history:history, carslisted:carslisted, reviews:reviews });
       });
     });
-    });
-    });
-    });
-    });
   });
+});
+});
+});
+});
 
 
 app.post("/viewProfile", upload.single('photo'), function (req, res) {
@@ -158,8 +157,8 @@ app.get('/userprofile', function (req, res) {
 
 var field= [{name:'aadhar', maxCount:1},{name:'license',maxCount:1}];
 app.post("/verification", upload.fields(field), function (req, res) {
-  con.query("UPDATE user_info SET License='"+req.files.aadhar[0].filename+"',Verification='"+req.files.license[0].filename+"'WHERE Email='"+email+"';",function (errors, result) {
-  console.log(result);
+  con.query("UPDATE user_info SET License='" + req.files.aadhar[0].filename + "',Verification='" + req.files.license[0].filename + "'WHERE Email='" + email + "';", function (errors, result) {
+    console.log(result);
     res.redirect("/viewProfile");
   });
 });
@@ -169,18 +168,17 @@ app.post("/verification", upload.fields(field), function (req, res) {
 
 
 app.get("/signInUp", function (req, res) {
-  if(!req.session.loggedinUser){
+  if (!req.session.loggedinUser) {
     var msg = '';
     console.log(req.session);
     res.render("signInUp", {
       alertMsgup: msg,
       alertMsgin: msg
     });
-  }
-  else{
+  } else {
     res.redirect("/")
   }
- 
+
 });
 
 
@@ -283,21 +281,20 @@ app.post("/signin", upload.none(), function (req, res) {
 //     res.redirect('/')
 //   })
 // })
-app.post("/cars", upload.none(), function(req, res) {
+app.post("/cars", upload.none(), function (req, res) {
   var days = "";
   var from = new Date(req.body.from);
   var until = new Date(req.body.until);
   const oneDay = 24 * 60 * 60 * 1000;
   const diffDays = Math.round(Math.abs((from - until) / oneDay));
-  var weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  var weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   console.log(diffDays);
-  if(diffDays > 6) {
+  if (diffDays > 6) {
     days = "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday";
-  }
-  else {
+  } else {
     days += weekday[from.getDay()];
-    for(var i = 1; i< diffDays; i++){
-      days += ","+ weekday[from.getDay() + i];
+    for (var i = 1; i < diffDays; i++) {
+      days += "," + weekday[from.getDay() + i];
     }
   }
   console.log(days);
@@ -345,7 +342,7 @@ app.post("/list", upload.array('rydePaps') ,function (req, res) {
   for(let i = 0; i < req.files.length; i++) {
     images += req.files[i].filename + ",";
   }
-  images = images.slice(0,-1)
+  images = images.slice(0, -1)
   console.log(req.body);
   console.log(images);
   con.query("INSERT INTO car_list (User_id, Address, State, City, Zip, Year, Make, Model, Kmpl, No_of_doors, No_of_seats, Fuel_type, Trasmission, Description, Features, Car_img, Car_category, Availability, Price) VALUES ('" + user_id + "','" + req.body.address + "','" + req.body.state + "','" + req.body.city + "','" + req.body.zip + "','" + req.body.year + "','" + req.body.make + "','" + req.body.model + "','" + req.body.kmpl + "','" + req.body.doors + "','" + req.body.seats + "','" + req.body.fuel + "','" + req.body.transmission + "','" + req.body.description + "','" + req.body.features + "','" + images + "','" + req.body.category + "','" + req.body.availability + "','" + req.body.price +"');", function (err, result) {
@@ -404,6 +401,9 @@ app.get("/cars", function (req, res) {
   }
 });
 
+app.get("/learnmore", function (req, res) {
+  res.render("learnMore");
+});
 
 PORT = process.env.PORT || 8000;
 const server = app.listen(PORT, () => {
