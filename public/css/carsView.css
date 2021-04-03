@@ -5,6 +5,9 @@
 .card-img-top {
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
+    height:15vw !important; 
+    width: 100%;
+    object-fit:cover !important;
 }
 
 .btn-warning{
@@ -78,3 +81,6 @@
 .blog-footer p:last-child {
   margin-bottom: 0;
 }
+
+
+

@@ -296,3 +296,12 @@ body {
 .carousel-control-next-icon {
   filter: invert(100);
 }
+a{
+text-decoration: none;
+color: black;
+}
+a:hover{
+  text-decoration: none;
+  color: black;
+  }
+  

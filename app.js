@@ -293,6 +293,8 @@ app.post("/signin", upload.none(), function (req, res) {
 //   })
 // })
 app.post("/cars", upload.none(), function (req, res) {
+  var where=req.body.where;
+  where=where.charAt(0).toUpperCase()+where.slice(1).toLowerCase();
   var days = "";
   var from = new Date(req.body.from);
   var until = new Date(req.body.until);
@@ -309,7 +311,7 @@ app.post("/cars", upload.none(), function (req, res) {
     }
   }
   console.log(days);
-  con.query("SELECT * FROM booking b RIGHT JOIN car_list c on b.Car_id = c.Car_id WHERE c.City = '" + req.body.where + "' AND c.Availability LIKE '%" + days + "%' AND c.Ongoing = 0;", function (err, result) {
+  con.query("SELECT * FROM booking b RIGHT JOIN car_list c on b.Car_id = c.Car_id WHERE c.City = '" + where + "' AND c.Availability LIKE '%" + days + "%' AND c.Ongoing = 0;", function (err, result) {
     console.log(result);
     res.render("carsView", { cars: result, where: req.body.where, from: req.body.from, until: req.body.until, days: diffDays });
 
@@ -337,7 +339,22 @@ app.get("/booking", function (req, res) {
 
 var fields = [{ name: 'aadhar', maxCount: 1 }, { name: 'license', maxCount: 1 }];
 app.post("/booking", upload.fields(fields), function (req, res) {
-  con.query("UPDATE user_info SET License='" + req.files.aadhar[0].filename + "',Verification='" + req.files.license[0].filename + "',Mobile='" + req.body.mobile + "'WHERE Email='" + req.session.Email + "';", function (errors, result) {
+  console.log(req.files)
+  var aadhar='';
+  var license='';
+  if (req.files==={}){
+    aadhar=req.body.aadhar
+    license=req.body.license
+  }
+  else if (req.files.aadhar==={}){
+    aadhar=req.body.aadhar 
+    license=req.files.license[0].filename
+  }
+  else if (req.files.license==={}){
+    aadhar=req.files.aadhar[0].filename
+    license=req.body.license
+  }
+  con.query("UPDATE user_info SET License='" + license+ "',Verification='" + aadhar  + "',Mobile='" + req.body.mobile + "'WHERE Email='" + req.session.Email + "';", function (errors, result) {
     console.log(errors);
   })
 })
@@ -402,7 +419,26 @@ app.get("/cars", function (req, res) {
   if (req.session.loggedinUser) {
     var query = req.query.sort;
     console.log(query);
-    if (query === "Popular" || typeof (query) === "undefined") {
+  //   if(req.query.category!==''){
+    
+  //   if (query === "Popular" || typeof (query) === "undefined" ) {
+  //     con.query("SELECT * FROM car_list where Car_category='"+req.query.category+"';", function (err, cars) {
+  //       //console.log(cars);
+  //       res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
+  //     });
+  //   } else if (query === "PriceHigh") {
+  //     con.query("SELECT * FROM car_list where Car_category='"+req.query.category+"' ORDER BY Price DESC;", function (err, cars) {
+  //       //console.log(cars);
+  //       res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
+  //     });
+  //   } else if (query === "PriceLow") {
+  //     con.query("SELECT * FROM car_list where Car_category='"+req.query.category+"' ORDER BY Price ASC;", function (err, cars) {
+  //       console.log(cars);
+  //       res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
+  //     });
+  //   }
+  // }else {
+    if (query === "Default" || typeof (query) === "undefined") {
       con.query("SELECT * FROM car_list;", function (err, cars) {
         //console.log(cars);
         res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
@@ -418,6 +454,9 @@ app.get("/cars", function (req, res) {
         res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
       });
     }
+
+  
+
   } else {
     res.redirect("/signinup");
   }

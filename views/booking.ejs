@@ -126,16 +126,20 @@
         autocomplete="off">
       <div class="modal-body">
           <h4>DATE AND TIME</h4>
+          <p>The availability days of the car are <%=booking[0].Availability%></p>
+          
           <div class="form-row">
             <div class="col-md-6 mb-3">
               <label for="validationDefault01">Start Date</label>
-              <input type="text" class="form-control" id="Start_date" value="<%=from%>">
+              <input type="datetime-local" class="form-control" id="Start-date" value="<%=from%>">
             </div>
             <div class="col-md-6 mb-3">
               <label for="validationDefault02">End Date</label>
-              <input type="text" class="form-control" id="End_date" value="<%=until%>">
+              <input type="datetime-local" class="form-control" id="End-date" value="<%=until%>">
             </div>
           </div>
+          
+  
           <hr>
           <h4>VERIFICATION</h4>
           <% if (booking1[0].Verification===null||booking1[0].Verification===""){ %>
@@ -147,7 +151,8 @@
                   card/Passport</label>
               </div>
             </div>
-          <% } else{ aadhar=booking1[0].Verification%>
+          <% } else{%>
+            <input type="hidden" value="<%= booking1[0].Verification%>" name="aadhar">
             <p><i class="bi bi-check-circle" style="color: #ffd93b;"></i> Aadhar card/ Passport submitted</p> 
             
             <% } %> 
@@ -161,7 +166,8 @@
                     License</label>
                 </div>
               </div>
-            <% } else{  license=booking1[0].License%>
+            <% } else{  %>
+              <input type="hidden" value="<%= license=booking1[0].License%>" name="license">
               <p> <i class="bi bi-check-circle" style="color: #ffd93b;"></i> Driver's License submitted<p> 
               <% } %> 
               <% if (booking1[0].Mobile===null||booking1[0].Mobile===""){ %>
@@ -170,13 +176,14 @@
                   <input type="tel" class="form-control" id="mobile"  required>
                   
                 </div>
-              <% } else{ mobile=booking1[0].Mobile%>
+              <% } else{ %>
+                <input type="hidden" value="<%= mobile=booking1[0].Mobile%>" name="mobile">
                 <p> <i class="bi bi-check-circle" style="color: #ffd93b;"></i> Phone number given<p> 
                 <% } %> 
                   <hr>
-                  <h4>TOTAL PRICE</h4>
-                  <p>THE total amount you will pay for <%=days%> days is </p>
-                  <h5>₹ <%=booking[0].Price*days*24%></h5>
+                  <h4>PRICE /hr</h4>
+                  
+                  <h5>₹ <%=booking[0].Price%></h5>
                 </div>
                 <div class="modal-footer">
                   <button type="submit" class="btn btn-outline-warning  btn-lg btn-block">PAY</button>
@@ -488,13 +495,40 @@
           window.addEventListener('load', function () {
             // Fetch all the forms we want to apply custom Bootstrap validation styles to
             var forms = document.getElementsByClassName('needs-validation');
+          var booking= '<%-JSON.stringify(booking[0])%>';
+          booking = JSON.parse(booking);
+          
+         
             // Loop over them and prevent submission
             var validation = Array.prototype.filter.call(forms, function (form) {
-              form.addEventListener('submit', function (event) {
+                form.addEventListener('submit', function (event) {
+                var days = "";
+          var from = document.getElementById("Start-date").value;
+          var from = new Date(from);
+          var until = document.getElementById("End-date").value;
+          var until = new Date(until);
+          const oneDay = 24 * 60 * 60 * 1000;
+          const diffDays = Math.round(Math.abs((from - until) / oneDay));
+          var weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+          console.log(diffDays);
+          if (diffDays > 6) {
+            days = "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday";
+          } else {
+            days += weekday[from.getDay()];
+            for (var i = 1; i < diffDays; i++) {
+              days += "," + weekday[from.getDay() + i];
+            }
+          } 
+            
                 if (form.checkValidity() === false) {
                   event.preventDefault();
                   event.stopPropagation();
-                }
+                }if (!booking.Availability.includes(days) || booking.Ongoing===1 || booking.listed===0){
+                  alert("RYDE not available for the dates specified!")
+                  event.preventDefault();
+                  event.stopPropagation();
+                  
+          }
                 form.classList.add('was-validated');
               }, false);
             });

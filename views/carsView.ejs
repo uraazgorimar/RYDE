@@ -80,7 +80,7 @@
                 Sort By
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="?sort=Popular">Popular</a>
+                <a class="dropdown-item" href="?sort=Default">Default</a>
                 <a class="dropdown-item" href="?sort=PriceLow">Price Low to High</a>
                 <a class="dropdown-item" href="?sort=PriceHigh">Price High to Low</a>
             </div>
@@ -129,7 +129,7 @@
                                     </div>
                                 </div>
                             </div> <small class="text-muted key pl-3">Standard key Features</small>
-                            <a href="/booking?Car_id=<%= cars[i].Car_id %>&from=<%= from %> &until=<%= until %>&days=<%= days %>"><div class="mx-3 mt-3 mb-2"><button type="button" class="btn btn-warning btn-block book-btn"><small>Book</small></button></div></a>
+                            <a href="/booking?Car_id=<%= cars[i].Car_id %>&from=<%= from %>&until=<%= until %>&days=<%= days %>"><div class="mx-3 mt-3 mb-2"><button type="button" class="btn btn-warning btn-block book-btn"><small>Book</small></button></div></a>
                         </div>
                     </div>
                 </div>
@@ -138,7 +138,7 @@
                     <% for( let i=0; i < cars.length; i++ ) { %>
                     <div class="col-md-6">
                         <div class="card my-3">
-                            <img src="/resources/<%= cars[i].Car_img.split(",")[0] %>" class="card-img-top" width="100%">
+                            <img src="/resources/<%= cars[i].Car_img.split(",")[0] %>" class="card-img-top ">
                     
                             <div class="card-body">
                                 <h5 class="card-title">
