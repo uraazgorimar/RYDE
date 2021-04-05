@@ -64,11 +64,12 @@ app.use(
 // };
 
 app.get("/", function (req, res) {
-  res.render("homepage");
-  console.log(req.session);
+  res.render("homepage", {
+    Fname: req.session.Fname,
+    loggedinUser: req.session.loggedinUser
+  });
+
 });
-
-
 
 app.get('/viewProfile', function (req, res) {
   if (req.session.loggedinUser) {
@@ -175,16 +176,15 @@ app.post("/verification", upload.fields(field), function (req, res) {
 });
 
 
-
-
-
 app.get("/signInUp", function (req, res) {
   if (!req.session.loggedinUser) {
     var msg = '';
     console.log(req.session);
     res.render("signInUp", {
       alertMsgup: msg,
-      alertMsgin: msg
+      alertMsgin: msg,
+      Fname: req.session.Fname,
+      loggedinUser: req.session.loggedinUser
     });
   } else {
     res.redirect("/")
@@ -270,6 +270,7 @@ app.post("/signin", upload.none(), function (req, res) {
           req.session.loggedinUser = true;
           req.session.Email = Email;
           req.session.user_id = data[0].User_id;
+          req.session.Fname = data[0].Fname;
           console.log(req.session);
           res.redirect("/");
         } else {
@@ -284,14 +285,13 @@ app.post("/signin", upload.none(), function (req, res) {
   }
 });
 
-
-// app.post("/logout", upload.none(), function (req, res) {
-//   req.session.destroy(function (err) {
-//     if (err) throw err;
-//     res.clearCookie(seshbro)
-//     res.redirect('/')
-//   })
-// })
+app.post("/logout", upload.none(), function (req, res) {
+  req.session.destroy(function (err) {
+    if (err) throw err;
+    res.clearCookie('seshbro')
+    res.redirect('/')
+  })
+})
 app.post("/cars", upload.none(), function (req, res) {
   var where=req.body.where;
   where=where.charAt(0).toUpperCase()+where.slice(1).toLowerCase();
@@ -373,13 +373,15 @@ app.get('/list', function (req, res) {
 app.post("/list", upload.array('rydePaps'), function (req, res) {
   var user_id = req.session.user_id;
   var images = "";
+  var ogdesc = req.body.description;
+  var description = ogdesc.replace("'", "\\'");
   for (let i = 0; i < req.files.length; i++) {
     images += req.files[i].filename + ",";
   }
   images = images.slice(0, -1)
   console.log(req.body);
   console.log(images);
-  con.query("INSERT INTO car_list (User_id, Address, State, City, Zip, Year, Make, Model, Kmpl, No_of_doors, No_of_seats, Fuel_type, Trasmission, Description, Features, Car_img, Car_category, Availability, Price) VALUES ('" + user_id + "','" + req.body.address + "','" + req.body.state + "','" + req.body.city + "','" + req.body.zip + "','" + req.body.year + "','" + req.body.make + "','" + req.body.model + "','" + req.body.kmpl + "','" + req.body.doors + "','" + req.body.seats + "','" + req.body.fuel + "','" + req.body.transmission + "','" + req.body.description + "','" + req.body.features + "','" + images + "','" + req.body.category + "','" + req.body.availability + "','" + req.body.price + "');", function (err, result) {
+  con.query("INSERT INTO car_list (User_id, Address, State, City, Zip, Year, Make, Model, Kmpl, No_of_doors, No_of_seats, Fuel_type, Trasmission, Description, Features, Car_img, Car_category, Availability, Price) VALUES ('" + user_id + "','" + req.body.address + "','" + req.body.state + "','" + req.body.city + "','" + req.body.zip + "','" + req.body.year + "','" + req.body.make + "','" + req.body.model + "','" + req.body.kmpl + "','" + req.body.doors + "','" + req.body.seats + "','" + req.body.fuel + "','" + req.body.transmission + "','" + description + "','" + req.body.features + "','" + images + "','" + req.body.category + "','" + req.body.availability + "','" + req.body.price + "');", function (err, result) {
     console.log(err);
     res.redirect("/viewProfile");
   });
@@ -463,7 +465,10 @@ app.get("/cars", function (req, res) {
 });
 
 app.get("/learnmore", function (req, res) {
-  res.render("learnMore");
+  res.render("learnMore", {
+    Fname: req.session.Fname,
+    loggedinUser: req.session.loggedinUser
+  });
 });
 
 PORT = process.env.PORT || 8000;

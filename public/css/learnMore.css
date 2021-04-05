@@ -1,3 +1,29 @@
+.bg-primary {
+  background-color: #333 !important;
+}
+
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.pb-5,
+.py-5 {
+  padding-bottom: 0rem !important;
+}
+.pt-5,
+.py-5 {
+  padding-top: 1rem !important;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
 .b-example-divider {
   height: 3rem;
   background-color: rgba(0, 0, 0, .1);

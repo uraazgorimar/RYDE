@@ -23,17 +23,31 @@
         <div class="collapse navbar-collapse " id="navbarNav">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link" href="#">Booking</a>
+              <a class="nav-link" href="/cars">Rent a Ryde</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Features</a>
+              <a class="nav-link" href="/list">List a Ryde</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Pricing</a>
+              <a class="nav-link" href="/learnMore">Learn More</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Sign in / Sign up</a>
+            <% if(loggedinUser === true) { %> 
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Hello, <%= Fname %>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right bg-grey" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/viewProfile">My Profile</a>
+                <form action="/logout" method="POST" enctype="multipart/form-data">
+                <button class="dropdown-item" type="submit" href="/logout">Logout</button>
+                </form>
+              </div>
             </li>
+          <% } else { %> 
+          <li class="nav-item">
+            <a class="nav-link" href="#">Sign in / Sign up</a>
+          </li>
+          <% } %> 
           </ul>
         </div>
       </nav>
@@ -80,16 +94,15 @@
               <%} %>
             <button style="color: black; border-radius: 55px;" type="submit" class="btn btn-warning">Sign Up</button>
           </form>
-    
         </div>
       </div>
 
       <div class="panels-container">
         <div class="panel left-panel">
           <div class="content">
-            <h3 style="color: #ffd93b;">New here ?</h3>
-            <p style="color: white;">
-             Join many others in an effortless peer to peer car renting service experience ! 
+            <h3 style="color: #ffd93b;">New here?</h3>
+            <p style="font-size: 1.5rem ; color: white;">
+             Want an effortless peer to peer car renting service experience? Join many others with RYDE. Sign up now!
             </p>
             <button class="btn transparent" id="sign-up-btn">
               Sign up
@@ -100,7 +113,7 @@
         <div class="panel right-panel">
           <div class="content">
             <h3 style="color:#ffd93b;">One of us ?</h3>
-            <p style="color: white;">
+            <p style="font-size: 1.5rem; color: white;">
              Sign in now to rent from hundreds of rydes or to list your ryde and make money !
             </p>
             <button class="btn transparent" id="sign-in-btn">
