@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+<script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .dropdown-item, .dropdown-menu{
+    color: rgba(255,255,255,.5)  !important;
+  }
+  .dropdown-item:hover{
+    color: white !important;
+    background-color: transparent !important;
+  } 
+  
+</style>
+  
+</head>
+
+<body>
+ 
+  <nav style="background-color: #292929;" class="navbar navbar-expand-lg navbar-dark bg-grey w-100">
+      <a style="color: #fff;" class="navbar-brand" href="/">RYDE Admin</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse " id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/admin">User information</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/adminCars">Cars listed</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/adminbooking">Bookings</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  <br>
+  <br>
+  <br>
+  <div class="container marketing text-center">
+   
+    <div class="container text-center">
+    <div style="background-color: white;">
+        
+    <table id="userinfo" class="table table-hover table-responsive table-bordered display rounded-3 border shadow-lg" >
+        <thead>
+            <tr>
+                <th>User Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th> Profile photo</th>
+                <th>State</th>
+                <th>City</th>
+                <th>Zip</th>
+                <th>License</th>
+                <th>Verification</th>
+                <th>User Descrition</th>
+                <th>Mobile</th>
+                <th>Remove</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            <% for(let i=0; i<users.length; i++){%> 
+            <tr>
+                <td><%=users[i].User_id%></td>
+                <td><%=users[i].Fname%></td>
+                <td><%=users[i].Lname%></td>
+                <td><%=users[i].Email%></td>
+                
+
+                <% if (users[i].Profile_photo===null||users[i].Profile_photo==="" ) { %>
+                    <td>No profile photo</td>
+                    <% } else{ %> 
+                <td><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#a<%=users[i].Profile_photo%>">
+                    View Image
+                  </button></td>
+                  <% } %> 
+ 
+                <td><%=users[i].State%></td>
+                <td><%=users[i].City%></td>
+                <td><%=users[i].Zip%></td>
+                <% if (users[i].License===null||users[i].License==="" ) { %>
+                  <td>License not submitted</td>
+                  <% } else{ %> 
+              <td><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#a<%=users[i].License%>">
+                  View Image
+                </button></td>
+                <% } %> 
+
+                  <% if (users[i].Verification===null||users[i].Verification==="" ) { %>
+                    <td>No Verification</td>
+                    <% } else{ %> 
+                <td><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#a<%=users[i].Verification%>">
+                    View Image
+                  </button></td>  
+                  <% } %>
+                <td><%=users[i].user_description%></td>
+                <td><%=users[i].Mobile%></td>
+                <form class="needs-validation" novalidate action="/admin" method="post" enctype="multipart/form-data"
+        autocomplete="off">
+                <input type="hidden" value="<%=users[i].User_id%>" name="userid">
+                    <td> <button type="submit" class="btn btn-outline-warning  btn-sm">Delete</button></td>
+                </form>
+            </tr>
+              <div class="modal" tabindex="-1" id="a<%=users[i].Verification%>">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Verification</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <img src="/resources/<%=users[i].Verification%>" style='width:100%;' alt="img">
+                      <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            <div class="modal fade" id="a<%=users[i].Profile_photo%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Profile Photo</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <img src="/resources/<%=users[i].Profile_photo%>" style='width:100%;' alt="img">
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          
+<div class="modal fade" id="a<%=users[i].License%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">License</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <img src="/resources/<%=users[i].License%>" style='width:100%;' alt="img">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  
+           <%}%>
+        </tbody>
+    </table>
+  </div>
+</div>
+
+
+  
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready( function () {
+    $('#userinfo').DataTable();
+  });
+
+
+    </script>
+</body>
+</html>

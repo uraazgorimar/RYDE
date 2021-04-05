@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require("express");
+const nodemailer = require("nodemailer");
 const ejs = require("ejs");
 const mysql = require("mysql");
 const bcrypt = require("bcrypt");
@@ -7,6 +8,8 @@ const session = require("express-session");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const multer = require("multer");
+const _ = require('lodash');
+const app = express();
 var upload = multer({
   dest: "uploads/",
 });
@@ -16,7 +19,20 @@ var instance = new Razorpay({
   key_secret: process.env.KEY_SECRET,
 });
 
-const app = express();
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'ryde.noreply@gmail.com',
+    pass: 'WeAreAMU'
+  }
+});
+transporter.verify((error, success) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Server is ready to take messages');
+  }
+});
 
 var con = mysql.createConnection({
   host: process.env.HOSTNAME,
@@ -169,6 +185,7 @@ app.post('/userprofile', upload.none(), function (req, res) {
 
 var field = [{ name: 'aadhar', maxCount: 1 }, { name: 'license', maxCount: 1 }];
 app.post("/verification", upload.fields(field), function (req, res) {
+  
   con.query("UPDATE user_info SET License='" + req.files.aadhar[0].filename + "',Verification='" + req.files.license[0].filename + "'WHERE Email='" + req.session.Email + "';", function (errors, result) {
     console.log(result);
     res.redirect("/viewProfile");
@@ -290,8 +307,8 @@ app.post("/logout", upload.none(), function (req, res) {
     if (err) throw err;
     res.clearCookie('seshbro')
     res.redirect('/')
-  })
-})
+  });
+});
 app.post("/cars", upload.none(), function (req, res) {
   var where=req.body.where;
   where=where.charAt(0).toUpperCase()+where.slice(1).toLowerCase();
@@ -314,7 +331,6 @@ app.post("/cars", upload.none(), function (req, res) {
   con.query("SELECT * FROM booking b RIGHT JOIN car_list c on b.Car_id = c.Car_id WHERE c.City = '" + where + "' AND c.Availability LIKE '%" + days + "%' AND c.Ongoing = 0;", function (err, result) {
     console.log(result);
     res.render("carsView", { cars: result, where: req.body.where, from: req.body.from, until: req.body.until, days: diffDays });
-
   });
 });
 
@@ -323,7 +339,7 @@ app.get("/booking", function (req, res) {
     var carid = req.query.Car_id;
 
     con.query("SELECT Car_id, c.User_id, Address, c.State, c.City, c.Zip, Year, Make, Model, Kmpl, No_of_doors, No_of_seats, Fuel_type, Trasmission, Description, Features, Car_img, Car_category, Offers, Availability, Price, Fname, Lname, Email, Profile_photo, License, Verification, user_description, Mobile from car_list c LEFT JOIN user_info u ON c.User_id=u.User_id where Car_id='" + carid + "';", function (err, booking) {
-      console.log(booking);
+      //console.log(booking);
       con.query("SELECT * from car_reviews c LEFT JOIN user_info u ON c.User_id=u.User_id where Car_id='" + carid + "';", function (err, car_reviews) {
         con.query("SELECT round(avg(stars),1) as 'avg' from car_reviews where Car_id='" + carid + "';", function (err, car_stars) {
           con.query("SELECT * FROM user_info WHERE Email ='" + req.session.Email + "';", function (err, booking1) {
@@ -339,25 +355,145 @@ app.get("/booking", function (req, res) {
 
 var fields = [{ name: 'aadhar', maxCount: 1 }, { name: 'license', maxCount: 1 }];
 app.post("/booking", upload.fields(fields), function (req, res) {
-  console.log(req.files)
+  var baseprice = 0;
+  var deposit = 5000;
+  var tax = 0.18;
+  var from = new Date(req.body.from);
+  var until = new Date(req.body.until);
+  var hours = Math.abs(until - from) / 36e5;
+  baseprice = hours*Number(req.body.hourprice);
+  var totalprice = (baseprice*tax)+baseprice+deposit;
+  totalprice = Math.round(totalprice);
+  //console.log(totalprice);
   var aadhar='';
   var license='';
-  if (req.files==={}){
-    aadhar=req.body.aadhar
-    license=req.body.license
+  if (_.isEmpty(req.files)){
+    aadhar=req.body.aadhar1;
+    license=req.body.license1;
   }
-  else if (req.files.aadhar==={}){
-    aadhar=req.body.aadhar 
-    license=req.files.license[0].filename
+  else if (_.isEmpty(req.files.aadhar)){
+    aadhar=req.body.aadhar1;
+    license=req.files.license[0].filename;
   }
-  else if (req.files.license==={}){
-    aadhar=req.files.aadhar[0].filename
-    license=req.body.license
+  else if (_.isEmpty(req.files.license)){
+    aadhar=req.files.aadhar[0].filename;
+    license=req.body.license1;
   }
+  else if (!_.isEmpty(req.files)){
+    aadhar = req.files.aadhar[0].filename;
+    license = req.files.license[0].filename;
+  }
+  con.query("SELECT COUNT(Receipt_id) AS count FROM receipts;", function (errors, ress) {
+  var options = {
+    amount: totalprice*100,  // amount in the smallest currency unit
+    currency: "INR",
+    receipt: "order_rcptid_" + ress.count+1,
+    payment_capture: '1'
+  };
   con.query("UPDATE user_info SET License='" + license+ "',Verification='" + aadhar  + "',Mobile='" + req.body.mobile + "'WHERE Email='" + req.session.Email + "';", function (errors, result) {
-    console.log(errors);
-  })
-})
+    //console.log(result);
+    instance.orders.create(options, function (err, order) {
+      //console.log(order);
+      res.redirect("/checkout/" + order.id + "/" + req.body.from + "/" + req.body.until + "/" + hours + "/" + req.body.hourprice + "/" + baseprice + "/" + deposit + "/" + tax + "/" + totalprice+ "/" + req.body.car_id);
+    });
+  });
+});
+});
+
+app.get("/checkout/:orderid/:from/:until/:hours/:hourprice/:baseprice/:deposit/:tax/:totalprice/:carid", function (req, res) {
+  //console.log(req.params);
+  
+
+  con.query("SELECT * FROM car_list where Car_id ='" + req.params.carid + "';", function (err, car) {
+    con.query("SELECT * FROM user_info where User_id ='" + req.session.user_id + "';", function (err, user){
+      con.query("INSERT INTO booking (Owner_id, Rentee_id, Car_id, Date, Duration_hrs, Price, Return_date) VALUES ('" + car[0].User_id + "','" + req.session.user_id + "','" + req.params.carid + "','" + req.params.from + "','" + req.params.hours + "','" + req.params.totalprice + "','" + req.params.until + "');", function (err, result) {
+        //console.log(result);
+      res.render("checkout", { details: req.params, car:car, user:user, key: process.env.KEY_ID, bookingid:result.insertId});
+    })
+  });
+});
+});
+app.post("/checkout", upload.none(), function(req, res) {
+  body = req.body.order_id + "|" + req.body.payment_id;
+
+  var expectedSignature = crypto
+    .createHmac("sha256", process.env.KEY_SECRET)
+    .update(body.toString())
+    .digest("hex");
+  // console.log("sig" + req.body.signature);
+  // console.log("sig" + expectedSignature);
+  if (expectedSignature === req.body.signature) {
+    con.query("INSERT INTO receipts (Order_id, Payment_id, Signature, Verified, Booking_id) VALUES ('" + req.body.order_id + "','" + req.body.payment_id + "','" + req.body.signature + "',1,'" + req.body.booking_id +"');", function (err, result) {
+      con.query("UPDATE booking SET Paid=1 WHERE Booking_id=" + req.body.booking_id + ";", function (err, nothing) {
+        //res.render("booked");
+        con.query("SELECT *, DATE_FORMAT(Date,'%d-%m-%Y %H:%i') AS Date, DATE_FORMAT(Return_date,'%d-%m-%Y %H:%i') AS Return_date  FROM booking WHERE Booking_id=" + req.body.booking_id + ";", function (err, booking) {
+          //console.log(err);
+          con.query("SELECT Fname,Lname,Email,Mobile FROM user_info WHERE User_id=" + booking[0].Owner_id + " OR User_id=" + booking[0].Rentee_id + ";", function (err, users) {
+            //console.log(err);
+            var baseprice = booking[0].Price-(booking[0].Price*0.18)-5000;
+            var hourprice = baseprice / booking[0].Duration_hrs;
+            res.render("booked");
+            ejs.renderFile(__dirname +"/htmlEmail/index.ejs", {order_id: result.insertId, details: booking[0], user: users[0], baseprice: baseprice, hourprice: hourprice}, function (err, data) {
+              if (err) {
+                console.log(err);
+              } else {
+                var mainOptions = {
+                  from: 'ryde.noreply@gmail.com',
+                  to: users[1].Email,
+                  subject: 'Your RYDE is Booked!',
+                  html: data,
+                  attachments: [{
+                    filename: 'image-2.gif',
+                    path: __dirname +'/htmlEmail/image-2.gif',
+                    cid: 'thebigtick' //same cid value as in the html img src
+                  }, {
+                      filename: 'image-1.png',
+                    path: __dirname + '/htmlEmail/image-1.png',
+                      cid: 'rydelogo' //same cid value as in the html img src
+                    }]
+                };
+                //console.log("html data ======================>", mainOptions.html);
+                transporter.sendMail(mainOptions, function (err, info) {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    console.log('Message sent: ' + info.response);
+                  }
+                });
+              }
+            });
+            // ejs.render("email", { details: booking[0], user: users[1], baseprice: baseprice, hourprice: hourprice }, function (err, data) {
+            //   if (err) {
+            //     console.log(err);
+            //   } else {
+            //     var mainOptions = {
+            //       from: 'ryde.noreply@gmail.com',
+            //       to: users[0],
+            //       subject: 'Your RYDE is Booked!',
+            //       html: data
+            //     };
+            //     console.log("html data ======================>", mainOptions.html);
+            //     transporter.sendMail(mainOptions, function (err, info) {
+            //       if (err) {
+            //         console.log(err);
+            //       } else {
+            //         console.log('Message sent: ' + info.response);
+            //       }
+            //     });
+            //   }
+            // });
+            //res.render("email", {details: booking[0], user: users[0], baseprice: baseprice, hourprice:hourprice});
+            // res.render("email", { details: booking[0], owner: users[0], rentee: users[1], baseprice: baseprice, hourprice: hourprice });
+            
+          });
+        });
+      });
+    });
+  } else {
+    con.query("UPDATE booking SET Paid=0 WHERE Booking_id=" + req.body.booking_id + ";", function (err, result) {
+    });
+  }
+});
 
 
 
@@ -423,57 +559,210 @@ app.get("/booked", function (req, res) {
 });
 
 //
+
+app.post("/cars", upload.none(), function (req, res) {
+  var where = req.body.where;
+  where = where.charAt(0).toUpperCase() + where.slice(1).toLowerCase();
+  var days = "";
+  var from = new Date(req.body.from);
+  var until = new Date(req.body.until);
+  const oneDay = 24 * 60 * 60 * 1000;
+  const diffDays = Math.round(Math.abs((from - until) / oneDay));
+  var weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  console.log(diffDays);
+  if (diffDays > 6) {
+    days = "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday";
+  } else {
+    days += weekday[from.getDay()];
+    for (var i = 1; i < diffDays; i++) {
+      days += "," + weekday[from.getDay() + i];
+    }
+  }
+  console.log(days);
+  // con.query("SELECT * FROM booking b RIGHT JOIN car_list c on b.Car_id = c.Car_id WHERE c.City = '" + where + "' AND c.Availability LIKE '%" + days + "%' AND c.Ongoing = 0;", function (err, result) {
+  //   console.log(result);
+  //   res.render("carsView", { cars: result, where: req.body.where, from: req.body.from, until: req.body.until, days: diffDays });
+
+  // });
+  con.query("SELECT * FROM car_list WHERE City = '" + where + "' AND Availability LIKE '%" + days + "%' AND Ongoing = 0;", function (err, result) {
+    console.log(result);
+    res.render("carsView", { cars: result, where: req.body.where, from: req.body.from, until: req.body.until, days: diffDays });
+
+  });
+});
 app.get("/cars", function (req, res) {
-  if (req.session.loggedinUser) {
+
     var query = req.query.sort;
     console.log(query);
-  //   if(req.query.category!==''){
-    
-  //   if (query === "Popular" || typeof (query) === "undefined" ) {
-  //     con.query("SELECT * FROM car_list where Car_category='"+req.query.category+"';", function (err, cars) {
-  //       //console.log(cars);
-  //       res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
-  //     });
-  //   } else if (query === "PriceHigh") {
-  //     con.query("SELECT * FROM car_list where Car_category='"+req.query.category+"' ORDER BY Price DESC;", function (err, cars) {
-  //       //console.log(cars);
-  //       res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
-  //     });
-  //   } else if (query === "PriceLow") {
-  //     con.query("SELECT * FROM car_list where Car_category='"+req.query.category+"' ORDER BY Price ASC;", function (err, cars) {
-  //       console.log(cars);
-  //       res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
-  //     });
-  //   }
-  // }else {
-    if (query === "Default" || typeof (query) === "undefined") {
-      con.query("SELECT * FROM car_list;", function (err, cars) {
-        //console.log(cars);
-        res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
-      });
-    } else if (query === "PriceHigh") {
-      con.query("SELECT * FROM car_list ORDER BY Price DESC;", function (err, cars) {
-        //console.log(cars);
-        res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
-      });
-    } else if (query === "PriceLow") {
-      con.query("SELECT * FROM car_list ORDER BY Price ASC;", function (err, cars) {
-        console.log(cars);
-        res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
-      });
+
+  if (req.query.where !== '' && typeof (req.query.where) !== "undefined"){
+    var where = req.query.where;
+    where = where.charAt(0).toUpperCase() + where.slice(1).toLowerCase();
+    var days = "";
+    var from = new Date(req.query.from);
+    var until = new Date(req.query.until);
+    const oneDay = 24 * 60 * 60 * 1000;
+    const diffDays = Math.round(Math.abs((from - until) / oneDay));
+    var weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    console.log(diffDays);
+    if (diffDays > 6) {
+      days = "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday";
+    } else {
+      days += weekday[from.getDay()];
+      for (var i = 1; i < diffDays; i++) {
+        days += "," + weekday[from.getDay() + i];
+      }
     }
+    if (req.query.category !== '' && typeof (req.query.category) !== "undefined") {
 
-  
-
+      if (query === "Default" || typeof (query) === "undefined") {
+        con.query("SELECT * FROM car_list where Car_category='" + req.query.category + "' AND City = '" + where + "' AND Availability LIKE '%" + days + "%' AND Ongoing = 0;", function (err, cars) {
+          //console.log(cars);
+          res.render("carsView", { cars: cars, where: where, from: req.query.from, until: req.query.until, days: days});
+        });
+      } else if (query === "PriceHigh") {
+        con.query("SELECT * FROM car_list where Car_category='" + req.query.category + "' AND City = '" + where + "' AND Availability LIKE '%" + days + "%' AND Ongoing = 0 ORDER BY Price DESC;", function (err, cars) {
+          //console.log(cars);
+          res.render("carsView", { cars: cars, where: where, from: req.query.from, until: req.query.until, days: days });
+        });
+      } else if (query === "PriceLow") {
+        con.query("SELECT * FROM car_list where Car_category='" + req.query.category + "' AND City = '" + where + "' AND Availability LIKE '%" + days + "%' AND Ongoing = 0 ORDER BY Price ASC;", function (err, cars) {
+          //console.log(cars);
+          res.render("carsView", { cars: cars, where: where, from: req.query.from, until: req.query.until, days: days });
+        });
+      }
+    } else {
+      if (query === "Default" || typeof (query) === "undefined") {
+        con.query("SELECT * FROM car_list WHERE City = '" + where + "' AND Availability LIKE '%" + days + "%' AND Ongoing = 0;", function (err, cars) {
+          //console.log(cars);
+          res.render("carsView", { cars: cars, where: where, from: req.query.from, until: req.query.until, days: days });
+        });
+      } else if (query === "PriceHigh") {
+        con.query("SELECT * FROM car_list WHERE City = '" + where + "' AND Availability LIKE '%" + days + "%' AND Ongoing = 0 ORDER BY Price DESC;", function (err, cars) {
+          //console.log(cars);
+          res.render("carsView", { cars: cars, where: where, from: req.query.from, until: req.query.until, days: days });
+        });
+      } else if (query === "PriceLow") {
+        con.query("SELECT * FROM car_list WHERE City = '" + where + "' AND Availability LIKE '%" + days + "%' AND Ongoing = 0 ORDER BY Price ASC;", function (err, cars) {
+          console.log(cars);
+          res.render("carsView", { cars: cars, where: where, from: req.query.from, until: req.query.until, days: days });
+        });
+      }
+    }
   } else {
-    res.redirect("/signinup");
+    if (req.query.category !== '' && typeof (req.query.category) !== "undefined") {
+
+      if (query === "Default" || typeof (query) === "undefined") {
+        con.query("SELECT * FROM car_list where Car_category='" + req.query.category + "';", function (err, cars) {
+          //console.log(cars);
+          res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
+        });
+      } else if (query === "PriceHigh") {
+        con.query("SELECT * FROM car_list where Car_category='" + req.query.category + "' ORDER BY Price DESC;", function (err, cars) {
+          //console.log(cars);
+          res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
+        });
+      } else if (query === "PriceLow") {
+        con.query("SELECT * FROM car_list where Car_category='" + req.query.category + "' ORDER BY Price ASC;", function (err, cars) {
+          //console.log(cars);
+          res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
+        });
+      }
+    } else {
+      if (query === "Default" || typeof (query) === "undefined") {
+        con.query("SELECT * FROM car_list;", function (err, cars) {
+          //console.log(cars);
+          res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
+        });
+      } else if (query === "PriceHigh") {
+        con.query("SELECT * FROM car_list ORDER BY Price DESC;", function (err, cars) {
+          //console.log(cars);
+          res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
+        });
+      } else if (query === "PriceLow") {
+        con.query("SELECT * FROM car_list ORDER BY Price ASC;", function (err, cars) {
+          console.log(cars);
+          res.render("carsView", { cars: cars, where: "", from: "", until: "", days: "" });
+        });
+      }
+    }
   }
+});
+
+app.get("/email", function (req, res) {
+  res.render("email", {details: ""});
 });
 
 app.get("/learnmore", function (req, res) {
   res.render("learnMore", {
     Fname: req.session.Fname,
     loggedinUser: req.session.loggedinUser
+  });
+});
+
+app.get("/adminlogin", function (req, res) {
+  res.render("adminLogin" , {amsg: ''});
+});
+
+app.post("/alogin", upload.none(), function (req, res) {
+  var result = false;
+  var auser = req.body.ausername;
+  var apass = req.body.apass;
+  var sql = "SELECT * FROM admin WHERE Admin_name = ?";
+  if (auser == '' || apass == '') {
+    res.render("adminLogin", {
+      amsg: "Please fill out all the fields ! "
+    });
+  } else {
+    con.query(sql, [auser], function (err, data) {
+      console.log(data)
+      if(_.isEmpty(data)){
+        res.render("adminLogin", {
+          amsg: "Your Email Address is wrong",
+        });
+      }
+      else if (apass === data[0].Admin_pass) {
+          res.redirect("/admincars");
+        } else {
+          res.render("adminLogin", {
+            amsg: "Your password is wrong",
+          });
+        }
+      });
+    };
+});
+
+app.get("/admin", function (req, res) {
+  con.query("SELECT * FROM user_info;", function (err, users) {
+  res.render("admin",{users:users});
+})
+});
+
+app.post("/admin", upload.none(), function (req, res) {
+  con.query("DELETE FROM user_info WHERE User_id='"+req.body.userid+"';", function (err,cars) {
+    res.redirect("/admin")
+  });
+});
+app.get("/admincars", function (req, res) {
+  con.query("SELECT * FROM car_list;", function (err, carlist) {
+  res.render("adminCars",{carlist:carlist});
+})  
+});
+app.post("/admincars", upload.none(), function (req, res) {
+  con.query("DELETE FROM car_list WHERE Car_id='"+req.body.carid+"';", function (err,cars) {
+    res.redirect("/admincars")
+  });
+});
+
+app.get("/adminbooking", function (req, res) {
+  con.query("SELECT *, DATE_FORMAT(Date,'%d-%m-%Y %H:%i') AS Date, DATE_FORMAT(Return_date,'%d-%m-%Y %H:%i') AS Return_date FROM booking;", function (err, booking) {
+  res.render("adminbooking",{booking:booking});
+})  
+});
+
+app.post("/adminbooking", upload.none(), function (req, res) {
+  con.query("DELETE FROM booking WHERE Booking_id="+req.body.bookingid+";", function (err,cars) {
+    res.redirect("/adminbooking")
   });
 });
 

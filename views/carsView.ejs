@@ -44,7 +44,7 @@
 
         <section class="search-sec">
             <div class="container">
-                <form class="needs-validation" novalidate action="/cars" method="post" enctype="multipart/form-data" autocomplete="off">
+                <!-- <form class="needs-validation" novalidate action="/cars" method="post" enctype="multipart/form-data" autocomplete="off"> -->
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="row">
@@ -66,15 +66,15 @@
         
                                 <div class="col-lg-3 col-md-4 col-sm-12 p-0">
                                     <label for>&nbsp;</label>
-                                    <button type="submit" class="radius-left btn wrn-btn">Search</button>
+                                    <button class="radius-left btn wrn-btn" id="search-btn" onclick="search()">Search</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </form>
+                <!-- </form> -->
             </div>
         </section>
-        <div class="dropdown float-right dropleft mx-5">
+        <!-- <div class="dropdown float-right dropleft mx-5">
             <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 Sort By
@@ -84,9 +84,21 @@
                 <a class="dropdown-item" href="?sort=PriceLow">Price Low to High</a>
                 <a class="dropdown-item" href="?sort=PriceHigh">Price High to Low</a>
             </div>
+        </div> -->
+        <div class="dropdown float-right dropleft mx-5">
+            <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Sort By
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <button class="dropdown-item" type="button" value="Default" onclick="default1()">Default</button>
+                <button class="dropdown-item" type="button" value="PriceLow" onclick="priceLow()">Price Low to High</button>
+                <button class="dropdown-item" type="button" value="PriceHigh" onclick="priceHigh()">Price High to Low</button>
+            </div>
+            <button class="btn btn-outline-warning" onclick="resetfilter()">Reset</button>
         </div>
         <div class="container-fluid d-flex justify-content-center float-sm-none">
-            <div class="row">
+            <div class="row" id="roww">
                 <% if(cars.length === 0) {%> 
                     <p class="display-4">No cars available.</p>
                 <% } else if(cars.length > 1) { %> 
@@ -189,7 +201,63 @@
             <br><br>
     </main>
     <%- include("footer") %> 
-
+    <script>
+        function resetfilter(){
+            if(window.location.href.includes("?")){
+                var position = window.location.href.indexOf("?");
+                window.location.href = window.location.href.slice(0, position);
+            }
+        }
+        function search() {
+            var where = document.getElementById("where").value;
+            var from = document.getElementById("from").value;
+            var until = document.getElementById("until").value;
+            if(window.location.href.includes('?')){
+                window.location.href += "&where=" + where + "&from=" + from + "&until=" + until;
+            } else {
+                window.location.href += "?where=" + where + "&from=" + from + "&until=" + until;
+            }
+        }
+        function default1() {
+                var link = window.location.href;
+                if (link.includes('sort=PriceHigh')) {
+                link = link.replace("PriceHigh", "Default");
+                } else if (link.includes('sort=PriceLow')) {
+                link = link.replace("PriceLow", "Default");
+                } else if (link.includes('?')) {
+                    link += "&sort=Default";
+                } else {
+                    link += "?sort=Default";
+                }
+                window.location.href = link;
+            }
+        function priceLow() {
+            var link = window.location.href;
+            if (link.includes('sort=Default')) {
+                link = link.replace("Default", "PriceLow");
+            } else if (link.includes('sort=PriceHigh')) {
+                link = link.replace("PriceHigh", "PriceLow");
+            } else if(link.includes('?')){
+                link += "&sort=PriceLow";
+            } else {
+                link += "?sort=PriceLow";
+            }
+            window.location.href = link;
+        }
+        function priceHigh() {
+                var link = window.location.href;
+                if (link.includes('sort=Default')) {
+                    link = link.replace("Default", "PriceHigh");
+                } else if (link.includes('sort=PriceLow')) {
+                    link = link.replace("PriceLow", "PriceHigh");
+                } else if (link.includes('?')) {
+                    link += "&sort=PriceHigh";
+                } else {
+                    link += "?sort=PriceHigh";
+                }
+                window.location.href = link;
+            }
+    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

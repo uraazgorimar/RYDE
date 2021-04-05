@@ -131,11 +131,11 @@
           <div class="form-row">
             <div class="col-md-6 mb-3">
               <label for="validationDefault01">Start Date</label>
-              <input type="datetime-local" class="form-control" id="Start-date" value="<%=from%>">
+              <input type="datetime-local" class="form-control" id="Start-date" value="<%=from%>" name="from">
             </div>
             <div class="col-md-6 mb-3">
               <label for="validationDefault02">End Date</label>
-              <input type="datetime-local" class="form-control" id="End-date" value="<%=until%>">
+              <input type="datetime-local" class="form-control" id="End-date" value="<%=until%>" name="until">
             </div>
           </div>
           
@@ -152,7 +152,7 @@
               </div>
             </div>
           <% } else{%>
-            <input type="hidden" value="<%= booking1[0].Verification%>" name="aadhar">
+            <input type="hidden" value="<%= booking1[0].Verification%>" name="aadhar1">
             <p><i class="bi bi-check-circle" style="color: #ffd93b;"></i> Aadhar card/ Passport submitted</p> 
             
             <% } %> 
@@ -167,13 +167,13 @@
                 </div>
               </div>
             <% } else{  %>
-              <input type="hidden" value="<%= license=booking1[0].License%>" name="license">
+              <input type="hidden" value="<%= license=booking1[0].License%>" name="license1">
               <p> <i class="bi bi-check-circle" style="color: #ffd93b;"></i> Driver's License submitted<p> 
               <% } %> 
               <% if (booking1[0].Mobile===null||booking1[0].Mobile===""){ %>
                 <div class="form-group">
                   <label for="validationDefault01">Phone Number</label>
-                  <input type="tel" class="form-control" id="mobile"  required>
+                  <input type="tel" class="form-control" id="mobile" name="mobile" required>
                   
                 </div>
               <% } else{ %>
@@ -182,9 +182,11 @@
                 <% } %> 
                   <hr>
                   <h4>PRICE /hr</h4>
+                  <input type="hidden" name="hourprice" value="<%=booking[0].Price%>">
                   
                   <h5>₹ <%=booking[0].Price%></h5>
                 </div>
+                <input type="hidden" value="<%=booking[0].Car_id%>" name="car_id">
                 <div class="modal-footer">
                   <button type="submit" class="btn btn-outline-warning  btn-lg btn-block">PAY</button>
                   
@@ -550,3 +552,6 @@
 
 
 
+con.query("SELECT * FROM user_info;", function (err, users) {
+  res.render("admin",{users:users});
+});

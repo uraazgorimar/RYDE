@@ -83,39 +83,35 @@
 
                 <div class="container my-5">
                     <div style="background-color: white;"
-                        class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
-                        <section class="search-sec w-100">
-                            <div class="container">
-                                <form class="needs-validation" novalidate action="/cars" method="post"
-                                    enctype="multipart/form-data" autocomplete="off">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="row">
-                                                <div class="col-lg-3 col-md-4 col-sm-12 p-0">
-                                                    <label>Where</label>
-                                                    <input type="text" class="radius-right form-control search-slt"
-                                                        placeholder="City, address, airport or hotel" name="where"
-                                                        id="where">
-                                                </div>
-                                                <div class="col-lg-3 col-md-4 col-sm-12 p-0">
-                                                    <label>From</label>
-                                                    <input type="datetime-local"
-                                                        class="radius-left radius-right form-control search-slt"
-                                                        placeholder="From" name="from" id="from">
-                                                </div>
-                                                <div class="col-lg-3 col-md-4 col-sm-12 p-0">
-                                                    <label>Until</label>
-                                                    <input type="datetime-local"
-                                                        class="radius-left radius-right form-control search-slt"
-                                                        placeholder="Until" name="until" id="until">
-                                                </div>
-
-                                                <div class="col-lg-3 col-md-4 col-sm-12 p-0">
-                                                    <label for>&nbsp;</label>
-                                                    <button type="submit"
-                                                        class="radius-left btn wrn-btn">Search</button>
-                                                </div>
-                                </form>
+                        class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">                    
+            <section class="search-sec w-100">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 col-sm-12 p-0">
+                                    <label>Where</label>
+                                    <input type="text" class="radius-right form-control search-slt"
+                                        placeholder="City, address, airport or hotel" name="where" id="where">
+                                </div>
+                                <div class="col-lg-3 col-md-4 col-sm-12 p-0">
+                                    <label>From</label>
+                                    <input type="datetime-local" class="radius-left radius-right form-control search-slt"
+                                        placeholder="From" name="from" id="from" >
+                                </div>
+                                <div class="col-lg-3 col-md-4 col-sm-12 p-0">
+                                    <label>Until</label>
+                                    <input type="datetime-local" class="radius-left radius-right form-control search-slt"
+                                        placeholder="Until" name="until" id="until" >
+                                </div>
+        
+                                <div class="col-lg-3 col-md-4 col-sm-12 p-0">
+                                    <label for>&nbsp;</label>
+                                    <button class="radius-left btn wrn-btn" id="search-btn" onclick="search()">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                             </div>
                         </section>
                         <div class="container marketing text-center">
@@ -323,18 +319,24 @@
         </main>
         <%- include("footer") %>
 
-            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-                integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-                crossorigin="anonymous">
-                </script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
-                crossorigin="anonymous">
-                </script>
-            <script>
-                $('#recipeCarousel').carousel({
-                    interval: 10000
-                })
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+            </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous">
+            </script>
+        <script>
+             function search() {
+            var where = document.getElementById("where").value;
+            var from = document.getElementById("from").value;
+            var until = document.getElementById("until").value;
+            
+                window.location.href += "cars?where=" + where + "&from=" + from + "&until=" + until;
+           
+        }
+            $('#recipeCarousel').carousel({
+                interval: 10000
+            })
 
                 $('.carousel .carousel-item').each(function () {
                     var minPerSlide = 4;
@@ -359,4 +361,4 @@
 
     </body>
 
-</html>
+</html>DATE_FORMAT(date,'%d/%m/%Y') AS niceDate 
