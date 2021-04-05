@@ -416,6 +416,12 @@ app.post("/editCar", upload.array('rydePaps'), function (req, res) {
     });
   });
 });
+
+app.get("/booked", function (req, res) {
+
+  res.render("booked")
+});
+
 //
 app.get("/cars", function (req, res) {
   if (req.session.loggedinUser) {
