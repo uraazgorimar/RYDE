@@ -13,7 +13,12 @@
         <link rel="stylesheet" href="css/footer.css">
         <link rel="icon" href="images/ryde_white.png">
         <style>
-            .dropdown-item, .dropdown-menu{
+            .dropdown-item{
+                padding : 2px !important ;
+    color: rgba(255,255,255,.5)  !important;
+  }
+   .dropdown-menu{
+       min-width : 8rem  !important;
                 padding : 2px !important ;
     color: rgba(255,255,255,.5)  !important;
   }
@@ -48,7 +53,7 @@
                       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Hello, <%= Fname %>
                       </a>
-                      <div class="dropdown-menu dropdown-menu-left bg-transparent" aria-labelledby="navbarDropdown">
+                      <div class="dropdown-menu dropdown-menu-right bg-transparent" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/viewProfile">My Profile</a>
                         <form action="/logout" method="POST" enctype="multipart/form-data">
                         <button class="dropdown-item" type="submit" href="/logout">Logout</button>
@@ -361,4 +366,4 @@
 
     </body>
 
-</html>DATE_FORMAT(date,'%d/%m/%Y') AS niceDate 
+</html>

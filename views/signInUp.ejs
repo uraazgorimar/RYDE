@@ -31,23 +31,9 @@
             <li class="nav-item">
               <a class="nav-link" href="/learnMore">Learn More</a>
             </li>
-            <% if(loggedinUser === true) { %> 
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Hello, <%= Fname %>
-              </a>
-              <div class="dropdown-menu dropdown-menu-right bg-grey" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/viewProfile">My Profile</a>
-                <form action="/logout" method="POST" enctype="multipart/form-data">
-                <button class="dropdown-item" type="submit" href="/logout">Logout</button>
-                </form>
-              </div>
-            </li>
-          <% } else { %> 
           <li class="nav-item">
-            <a class="nav-link" href="#">Sign in / Sign up</a>
+            <a class="nav-link" href="/signInUp">Sign in / Sign up</a>
           </li>
-          <% } %> 
           </ul>
         </div>
       </nav>

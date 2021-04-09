@@ -17,32 +17,11 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-100">
-            <a class="navbar-brand" href="/">RYDE</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse " id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Booking</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Sign in / Sign up</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        <%- include('navbar')  %> 
+
     </header>
 
-    <div class="container">
+    <div style="background-color: white" class="container my-5 rounded-3 border shadow-lg">
         <div class="py-5 text-center">
             <h1 class="display-4">List a <span class="yellow-text display-4">Ryde.</span></h1>
             <p class="lead">Enter the following details about your ryde and sit back while it works for you.</p>
@@ -344,6 +323,7 @@
                 
                 <hr class="mb-4">
                 <button class="btn btn-outline-warning btn-lg" type="submit">Finish</button>
+                <br><br>
             </form>
         </div>
     </div>

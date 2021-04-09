@@ -16,29 +16,8 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-100">
-            <a class="navbar-brand" href="/">RYDE</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse " id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Booking</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Sign in / Sign up</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        <%- include('navbar')  %> 
+
     </header>
     <main role="main">
 
@@ -74,23 +53,12 @@
                 <!-- </form> -->
             </div>
         </section>
-        <!-- <div class="dropdown float-right dropleft mx-5">
-            <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Sort By
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="?sort=Default">Default</a>
-                <a class="dropdown-item" href="?sort=PriceLow">Price Low to High</a>
-                <a class="dropdown-item" href="?sort=PriceHigh">Price High to Low</a>
-            </div>
-        </div> -->
         <div class="dropdown float-right dropleft mx-5">
-            <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
+            <button class="btn btn-warning dropdown-toggle" type="button" id="sort" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 Sort By
             </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <div class="dropdown-menu" aria-labelledby="sort">
                 <button class="dropdown-item" type="button" value="Default" onclick="default1()">Default</button>
                 <button class="dropdown-item" type="button" value="PriceLow" onclick="priceLow()">Price Low to High</button>
                 <button class="dropdown-item" type="button" value="PriceHigh" onclick="priceHigh()">Price High to Low</button>
@@ -212,8 +180,12 @@
             var where = document.getElementById("where").value;
             var from = document.getElementById("from").value;
             var until = document.getElementById("until").value;
-            if(window.location.href.includes('?')){
-                window.location.href += "&where=" + where + "&from=" + from + "&until=" + until;
+            if (window.location.href.includes("where=")) {
+                var position = window.location.href.indexOf("where");
+                window.location.href = window.location.href.slice(0, position) + "where=" + where + "&from=" + from + "&until=" + until;
+            }
+            else if(window.location.href.includes('?')){
+                window.location.href += "&where=" + where + "&from=" + from + "&until=" + until;   
             } else {
                 window.location.href += "?where=" + where + "&from=" + from + "&until=" + until;
             }

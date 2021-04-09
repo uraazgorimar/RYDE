@@ -1,10 +1,15 @@
 <style>
-  .dropdown-item,
-  .dropdown-menu {
+  .item{
     color: rgba(255, 255, 255, 0.5) !important;
   }
 
-  .dropdown-item:hover {
+  .menu {
+    min-width : 8rem !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    min-width : 8rem !important;
+  }
+
+  .item:hover {
     color: white !important;
     background-color: transparent !important;
   }
@@ -32,10 +37,10 @@
             aria-haspopup="true" aria-expanded="false">
             Hello, <%= Fname %>
           </a>
-          <div class="dropdown-menu dropdown-menu-right bg-grey" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/viewProfile">My Profile</a>
+          <div class="menu dropdown-menu dropdown-menu-right bg-grey" aria-labelledby="navbarDropdown">
+            <a class="item dropdown-item" href="/viewProfile">My Profile</a>
             <form action="/logout" method="POST" enctype="multipart/form-data">
-              <button class="dropdown-item" type="submit" href="/logout">
+              <button class="item dropdown-item" type="submit" href="/logout">
                 Logout
               </button>
             </form>
