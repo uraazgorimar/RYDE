@@ -56,7 +56,7 @@ app.use(
     name: 'seshbro',
     resave: true,
     saveUninitialized: false,
-    secret: 'issa secret',
+    secret: process.env.SECRET,
     cookie: {
       maxAge: 1000 * 60 * 60 * 2,
       sameSite: true,
@@ -137,7 +137,7 @@ app.post("/viewProfile", upload.single('photo'), function (req, res) {
 app.post('/viewReview', upload.none(), function (req, res) {
   //console.log(req.body);
 
-  con.query("INSERT INTO car_reviews (User_id, Review, Stars, Car_id) VALUES ('" + req.body.u + "','" + req.body.Review + "','" + req.body.rating + "','" + req.body.Car_id + "');", function (errors, result) {
+  con.query("INSERT INTO car_reviews (User_id, Review, Stars, Car_id) VALUES (" + req.body.u + ",'" + req.body.Review + "','" + req.body.rating + "'," + req.body.Car_id + ");", function (errors, result) {
 
     res.redirect("/viewProfile")
   });
