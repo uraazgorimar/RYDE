@@ -34,16 +34,16 @@ transporter.verify((error, success) => {
   }
 });
 
-var con = mysql.createConnection({
-  host: process.env.HOSTNAME,
-  user: process.env.USER,
-  password: process.env.PASS,
-  database: process.env.DB
-});
-con.connect(function (err) {
-  if (err) throw err;
-  console.log("Database is connected successfully !");
-});
+// var con = mysql.createConnection({
+//   host: process.env.HOSTNAME,
+//   user: process.env.USER,
+//   password: process.env.PASS,
+//   database: process.env.DB
+// });
+// con.connect(function (err) {
+//   if (err) throw err;
+//   console.log("Database is connected successfully !");
+// });
 
 
 app.use(express.static('public'));
